@@ -1,20 +1,29 @@
+const TAGS = {
+  PULLUP_BAR: 'pull-up-bar',
+  ARMS: 'arms',
+  CORE: 'core',
+  LEGS: 'legs'
+}
+
+const ONE_SECOND = 1000
+
 const filterExercises = (exercises, state) => {
   return exercises.filter(exercise => {
     const { tags } = exercise
 
-    if (state.noPullupBar && tags.indexOf('pullup-bar') > -1) {
+    if (state.noPullupBar && tags.indexOf(TAGS.PULLUP_BAR) > -1) {
       return false
     }
 
-    if (state.noArms && tags.indexOf('arms') > -1) {
+    if (state.noArms && tags.indexOf(TAGS.ARMS) > -1) {
       return false
     }
 
-    if (state.noCore && tags.indexOf('core') > -1) {
+    if (state.noCore && tags.indexOf(TAGS.CORE) > -1) {
       return false
     }
 
-    if (state.noLegs && tags.indexOf('legs') > -1) {
+    if (state.noLegs && tags.indexOf(TAGS.LEGS) > -1) {
       return false
     }
 
@@ -53,8 +62,21 @@ export const state = () => ({
   noArms: false,
   noCore: false,
   noLegs: false,
-  exercises: []
+  allExercises: [],
+  filteredExercises: [],
+  exercises: [],
+  timer: 0,
+  round: 1,
+  activeIndex: 0,
+  intervalRef: null,
+  state: 'ready'
 })
+
+export const getters = {
+  totalDuration(state) {
+    return (state.workTimeSeconds + state.restTimeSeconds) * state.numExercises * state.repeatNum
+  }
+}
 
 export const mutations = {
   setNumExercises(state, payload) {
@@ -99,15 +121,122 @@ export const mutations = {
 
   resetExercises(state) {
     state.exercises = []
+  },
+
+  setAllExercises(state, payload) {
+    state.allExercises = payload
+  },
+
+  setFilteredExercises(state, payload) {
+    state.filteredExercises = payload
+  },
+
+  setTimer(state, payload) {
+    state.timer = payload
+  },
+
+  tickOneSecond(state) {
+    state.timer--
+  },
+
+  setRound(state, payload) {
+    state.round = payload
+  },
+
+  nextRound(state) {
+    state.round++
+  },
+
+  setActiveIndex(state, payload) {
+    state.activeIndex = payload
+  },
+
+  nextActiveIndex(state) {
+    state.activeIndex++
+  },
+
+  setIntervalRef(state, payload) {
+    state.intervalRef = payload
+  },
+
+  setState(state, payload) {
+    state.state = payload
   }
 }
 
 export const actions = {
-  async selectExercises({ state, commit }) {
-    const allExercises = await this.$request.getExercises()
-    const filteredExercises = filterExercises(allExercises, state)
-    const selected = selectRandomExercises(filteredExercises, state.numExercises)
+  selectExercises({ state, commit }) {
+    const filtered = filterExercises(state.allExercises, state)
+
+    commit('setFilteredExercises', filtered)
+
+    const selected = selectRandomExercises(filtered, state.numExercises)
 
     commit('setExercises', selected)
+
+    if (selected.length < state.numExercises) {
+      commit('setNumExercises', selected.length)
+    }
+  },
+
+  startWorkout({ state, commit, dispatch }) {
+    if (state.exercises.length === 0) {
+      dispatch('selectExercises')
+    }
+
+    commit('setTimer', 10)
+    commit('setState', 'countdown')
+
+    const interval = setInterval(() => {
+      dispatch('countdown')
+    }, ONE_SECOND)
+
+    commit('setIntervalRef', interval)
+  },
+
+  startWorkInterval({ state, commit }) {
+    commit('setState', 'work')
+    commit('setTimer', state.workTimeSeconds)
+  },
+
+  startRestInterval({ state, commit }) {
+    commit('setState', 'rest')
+    commit('setTimer', state.restTimeSeconds)
+  },
+
+  endRound({ state, commit, dispatch }) {
+    commit('nextActiveIndex')
+
+    if (state.activeIndex >= state.numExercises) {
+      commit('nextRound')
+      commit('setActiveIndex', 0)
+
+      if (state.round > state.repeatNum) {
+        commit('setState', 'complete')
+        clearInterval(state.intervalRef)
+      } else {
+        dispatch('startWorkInterval')
+      }
+    } else {
+      dispatch('startWorkInterval')
+    }
+  },
+
+  countdown({ state, commit, dispatch }) {
+    commit('tickOneSecond')
+
+    if (state.timer < 0) {
+      switch (state.state) {
+        case 'countdown':
+          dispatch('startWorkInterval')
+          break
+        case 'work':
+          dispatch('startRestInterval')
+          break
+        case 'rest':
+          dispatch('endRound')
+          break
+      }
+    }
   }
 }

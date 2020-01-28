@@ -9,7 +9,7 @@
           </div>
         </div>
         <div class="field">
-          <label class="label">How many circuit repetitions?</label>
+          <label class="label">How many rounds?</label>
           <div class="control">
             <input class="input" type="number" min="1" max="20" :value="repeatNum" @input="e => { setRepeatNum(e.target.value) }">
           </div>
@@ -51,40 +51,71 @@
             No Legs
           </label>
         </div>
+        <h3 class="title is-clearfix">
+          <span>Total Workout Duration</span>
+          <span class="is-pulled-right">{{ formatTime(totalDuration) }}</span>
+        </h3>
       </div>
       <div class="column is-half">
-        <h3>Total Workout Duration</h3>
-        <h4>{{ workoutDurationFormatted }}</h4>
-        <button class="button is-primary" @click="selectExercises">Draw Exercises</button>
-        <button class="button is-primary" @click="startWorkout">Start</button>
-        <p>{{ state }}</p>
-        <p>Round {{ round }} of {{ repeatNum }}</p>
-        <p>{{ timerFormatted }}</p>
-        <ul>
-          <li v-for="(exercise, index) in exercises" :key="index">
+        <div class="panel" :class="panelClass">
+          <div class="panel-heading">
+            <span v-if="state === 'ready'">Setup Your Workout</span>
+            <span v-if="state === 'countdown'">Get Ready!</span>
+            <div v-if="state === 'work'">
+              <span>Work</span>
+              <span class="is-pulled-right">Round {{ round }} of {{ repeatNum }}</span>
+            </div>
+            <div v-if="state === 'rest'">
+              <span>Rest</span>
+              <span class="is-pulled-right">Round {{ round }} of {{ repeatNum }}</span>
+            </div>
+            <span v-if="state === 'complete'">Complete!</span>
+          </div>
+          <div
+            v-if="state === 'ready' && exercises.length > 0"
+            class="panel-block"
+          >
+            <button class="button is-primary is-fullwidth" @click="startWorkout">Start</button>
+          </div>
+          <div
+            v-if="state !== 'ready' && state !== 'complete'"
+            class="panel-block"
+          >
+            <p class="is-size-1 has-text-centered">{{ formatTime(timer) }}</p>
+          </div>
+          <div class="panel-block" v-for="(exercise, index) in exercises" :key="index">
             <strong v-if="activeIndex === index">{{ exercise.name }}</strong>
             <span v-else>{{ exercise.name }}</span>
-          </li>
-        </ul>
+          </div>
+          <div
+            v-if="exercises.length === 0 || state === 'ready'"
+            class="panel-block"
+          >
+            <button
+              class="button is-primary is-fullwidth is-light"
+              @click="selectExercises"
+            >
+              <span v-if="exercises.length > 0">Redraw</span>
+              <span v-else>Draw Exercises</span>
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import { mapState, mapMutations, mapActions } from 'vuex'
+import { mapState, mapGetters, mapMutations, mapActions } from 'vuex'
 
 const ONE_SECOND = 1000
+const HOUR_IN_SECONDS = 3600
 
 export default {
-  data() {
-    return {
-      timer: 0,
-      round: 1,
-      activeIndex: 0,
-      intervalRef: null,
-      state: 'ready'
-    }
+  async asyncData({ app, store }) {
+    const exercises = await app.$request.getExercises()
+
+    store.commit('workout/setAllExercises', exercises)
   },
   computed: {
     ...mapState('workout', [
@@ -96,16 +127,26 @@ export default {
       'noArms',
       'noCore',
       'noLegs',
-      'exercises'
+      'exercises',
+      'timer',
+      'round',
+      'activeIndex',
+      'state'
     ]),
-    workoutDurationSeconds() {
-      return (this.workTimeSeconds + this.restTimeSeconds) * this.numExercises * this.repeatNum
-    },
-    workoutDurationFormatted() {
-      return this.formatTime(this.workoutDurationSeconds)
-    },
-    timerFormatted() {
-      return this.formatTime(this.timer)
+    ...mapGetters('workout', ['totalDuration']),
+    panelClass() {
+      switch (this.state) {
+        case 'coundown':
+          return 'is-warning'
+        case 'work':
+          return 'is-link'
+        case 'rest':
+          return 'is-info'
+        case 'complete':
+          return 'success'
+      }
+
+      return ''
     }
   },
   methods: {
@@ -119,57 +160,18 @@ export default {
       'setCoreOption',
       'setLegsOption'
     ]),
-    ...mapActions('workout', ['selectExercises']),
-    async startWorkout() {
-      if (this.exercises.length === 0) {
-        await this.selectExercises()
-      }
-
-      this.state = 'countdown'
-      this.timer = 10
-
-      this.intervalRef = setInterval(this.countdown, ONE_SECOND)
-    },
-    pauseTimer() {
-      clearInterval(this.intervalRef)
-    },
-    resumeTimer() {
-      this.intervalRef = setInterval(this.countdown, ONE_SECOND)
-    },
-    countdown() {
-      this.timer--
-
-      if (this.timer < 0) {
-        switch (this.state) {
-          case 'countdown':
-            this.state = 'work'
-            this.timer = this.workTimeSeconds
-            break
-          case 'work':
-            this.state = 'rest'
-            this.timer = this.restTimeSeconds
-            break
-          case 'rest':
-            this.activeIndex++
-            this.state = 'work'
-            this.timer = this.workTimeSeconds
-
-            if (this.activeIndex >= this.numExercises) {
-              this.round++
-              this.activeIndex = 0
-
-              if (this.round > this.repeatNum) {
-                this.state = 'complete'
-                clearInterval(this.intervalRef)
-              }
-            }
-        }
-      }
-    },
+    ...mapActions('workout', [
+      'selectExercises',
+      'startWorkout'
+    ]),
     formatTime(timeInSeconds) {
       if (!isNaN(timeInSeconds) && typeof timeInSeconds === 'number') {
         // TODO: display hour if timeInSeconds is that long
-        return new Date(timeInSeconds * 1000).toISOString().substr(14, 5)
+        if (timeInSeconds >= HOUR_IN_SECONDS) {
+          return new Date(timeInSeconds * ONE_SECOND).toISOString().substr(11, 8)
+        }
+
+        return new Date(timeInSeconds * ONE_SECOND).toISOString().substr(14, 5)
       }
 
       return '00:00'
