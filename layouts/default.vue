@@ -1,8 +1,19 @@
 <template>
   <div>
+    <global-header />
     <nuxt />
   </div>
 </template>
+
+<script>
+import GlobalHeader from '~/components/GlobalHeader'
+
+export default {
+  components: {
+    GlobalHeader
+  }
+}
+</script>
 
 <style>
 html {

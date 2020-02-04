@@ -28,6 +28,23 @@ export default {
 }
 </script>
 
-<style>
+<style lang="scss" scoped>
+.columns {
+  margin-left: 0;
+  margin-right: 0;
+}
 
+.column {
+  height: 100vh;
+  padding-left: 0;
+  padding-right: 0;
+
+  &:first-child {
+    border-right: 1px solid;
+  }
+
+  &:last-child {
+    border-left: 1px solid;
+  }
+}
 </style>
