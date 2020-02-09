@@ -194,14 +194,16 @@ export const actions = {
     commit('setIntervalRef', interval)
   },
 
-  startWorkInterval({ state, commit }) {
+  startWorkInterval({ state, commit, app }) {
     commit('setState', 'work')
     commit('setTimer', state.workTimeSeconds)
+    this.$sounds.playRoundStart()
   },
 
   startRestInterval({ state, commit }) {
     commit('setState', 'rest')
     commit('setTimer', state.restTimeSeconds)
+    this.$sounds.playRoundStart()
   },
 
   endRound({ state, commit, dispatch }) {
@@ -214,6 +216,7 @@ export const actions = {
       if (state.round > state.repeatNum) {
         commit('setState', 'complete')
         clearInterval(state.intervalRef)
+        this.$sounds.playComplete()
       } else {
         dispatch('startWorkInterval')
       }
