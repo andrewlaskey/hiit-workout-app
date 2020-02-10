@@ -1,22 +1,26 @@
 <template>
   <div class="timer">
-    <button class="button">
+    <button v-if="isPlaying" class="button" @click="pause">
       <icon symbol="icon-pause" />
+    </button>
+    <button v-if="!isPlaying" class="button" @click="play">
+      <icon symbol="icon-play_arrow" />
     </button>
     <p class="is-size-1 has-text-centered">{{ formatTime(timer) }}</p>
     <div class="buttons">
-      <button class="button">
+      <button class="button" @click="reset">
         <icon symbol="icon-replay" />
       </button>
-      <button class="button">
-        <icon symbol="icon-volume_off" />
+      <button class="button" @click="toggleSounds">
+        <icon v-if="soundsOn" symbol="icon-volume_up" />
+        <icon v-else symbol="icon-volume_off" />
       </button>
     </div>
   </div>
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState, mapGetters, mapMutations, mapActions } from 'vuex'
 import formatTime from '~/plugins/utils/formatTime'
 import Icon from '~/components/Icon'
 
@@ -26,11 +30,15 @@ export default {
   },
   computed: {
     ...mapState('workout', [
-      'timer'
-    ])
+      'timer',
+      'soundsOn'
+    ]),
+    ...mapGetters('workout', ['isPlaying'])
   },
   methods: {
-    formatTime
+    formatTime,
+    ...mapMutations('workout', ['toggleSounds']),
+    ...mapActions('workout', ['play', 'pause', 'reset'])
   }
 }
 </script>

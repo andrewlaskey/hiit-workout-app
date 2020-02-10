@@ -69,12 +69,17 @@ export const state = () => ({
   round: 1,
   activeIndex: -1,
   intervalRef: null,
-  state: 'ready'
+  state: 'ready',
+  soundsOn: true
 })
 
 export const getters = {
   totalDuration(state) {
     return (state.workTimeSeconds + state.restTimeSeconds) * state.numExercises * state.repeatNum
+  },
+
+  isPlaying(state) {
+    return state.intervalRef !== null
   }
 }
 
@@ -161,10 +166,22 @@ export const mutations = {
 
   setState(state, payload) {
     state.state = payload
+  },
+
+  toggleSounds(state) {
+    state.soundsOn = !state.soundsOn
   }
 }
 
 export const actions = {
+  reset({ commit, dispatch }) {
+    dispatch('pause')
+    commit('setState', 'ready')
+    commit('setTimer', 0)
+    commit('setActiveIndex', -1)
+    commit('setRound', 1)
+  },
+
   selectExercises({ state, commit }) {
     const filtered = filterExercises(state.allExercises, state)
 
@@ -186,24 +203,25 @@ export const actions = {
 
     commit('setTimer', 10)
     commit('setState', 'countdown')
-
-    const interval = setInterval(() => {
-      dispatch('countdown')
-    }, ONE_SECOND)
-
-    commit('setIntervalRef', interval)
+    dispatch('play')
   },
 
   startWorkInterval({ state, commit, app }) {
     commit('setState', 'work')
     commit('setTimer', state.workTimeSeconds)
-    this.$sounds.playRoundStart()
+
+    if (state.soundsOn) {
+      this.$sounds.playRoundStart()
+    }
   },
 
   startRestInterval({ state, commit }) {
     commit('setState', 'rest')
     commit('setTimer', state.restTimeSeconds)
-    this.$sounds.playRoundStart()
+
+    if (state.soundsOn) {
+      this.$sounds.playRoundStart()
+    }
   },
 
   endRound({ state, commit, dispatch }) {
@@ -216,7 +234,9 @@ export const actions = {
       if (state.round > state.repeatNum) {
         commit('setState', 'complete')
         clearInterval(state.intervalRef)
-        this.$sounds.playComplete()
+        if (state.soundsOn) {
+          this.$sounds.playComplete()
+        }
       } else {
         dispatch('startWorkInterval')
       }
@@ -242,5 +262,18 @@ export const actions = {
           break
       }
     }
+  },
+
+  pause({ state, commit }) {
+    clearInterval(state.intervalRef)
+    commit('setIntervalRef', null)
+  },
+
+  play({ commit, dispatch }) {
+    const interval = setInterval(() => {
+      dispatch('countdown')
+    }, ONE_SECOND)
+
+    commit('setIntervalRef', interval)
   }
 }
