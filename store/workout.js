@@ -67,7 +67,7 @@ export const state = () => ({
   exercises: [],
   timer: 0,
   round: 1,
-  activeIndex: 0,
+  activeIndex: -1,
   intervalRef: null,
   state: 'ready'
 })
@@ -231,6 +231,7 @@ export const actions = {
     if (state.timer < 0) {
       switch (state.state) {
         case 'countdown':
+          commit('setActiveIndex', 0)
           dispatch('startWorkInterval')
           break
         case 'work':

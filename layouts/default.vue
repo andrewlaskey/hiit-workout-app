@@ -1,16 +1,19 @@
 <template>
   <div>
+    <symbol-defs />
     <global-header />
     <nuxt />
   </div>
 </template>
 
 <script>
+import SymbolDefs from '~/components/SymbolDefs'
 import GlobalHeader from '~/components/GlobalHeader'
 
 export default {
   components: {
-    GlobalHeader
+    GlobalHeader,
+    SymbolDefs
   }
 }
 </script>

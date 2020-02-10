@@ -3,7 +3,7 @@
     <div class="navbar-menu">
       <div class="navbar-start">
         <nuxt-link to="/" class="navbar-item">
-          Home
+          HIIT Generator
         </nuxt-link>
       </div>
       <div class="navbar-end">

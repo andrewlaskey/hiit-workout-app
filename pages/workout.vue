@@ -29,6 +29,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import './../assets/styles/variables';
+
 .columns {
   margin-left: 0;
   margin-right: 0;
@@ -40,11 +42,11 @@ export default {
   padding-right: 0;
 
   &:first-child {
-    border-right: 1px solid;
+    border-right: 1px solid $grey-darker;
   }
 
   &:last-child {
-    border-left: 1px solid;
+    border-left: 1px solid $grey-darker;
   }
 }
 </style>
