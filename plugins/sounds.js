@@ -1,20 +1,28 @@
-import { Howl } from 'howler'
-
 export default ({ app }, inject) => {
-  const roundStart = new Howl({
-    src: ['bell-win.mp3']
-  })
+  const createAudio = id => {
+    if (process.browser) {
+      const audioElement = document.getElementById(id)
 
-  const complete = new Howl({
-    src: ['bell-deep.mp3']
-  })
+      return audioElement
+    }
+
+    return undefined
+  }
+
+  const roundStart = createAudio('round-start')
+
+  const complete = createAudio('complete')
 
   const playRoundStart = () => {
-    roundStart.play()
+    if (process.browser) {
+      roundStart.play()
+    }
   }
 
   const playComplete = () => {
-    complete.play()
+    if (process.browser) {
+      complete.play()
+    }
   }
 
   const plugin = {
