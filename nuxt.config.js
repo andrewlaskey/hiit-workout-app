@@ -30,7 +30,8 @@ export default {
   */
   plugins: [
     '~/plugins/sounds.js',
-    '~/plugins/request.js'
+    '~/plugins/request.js',
+    '~/plugins/markdown.js'
   ],
   /*
   ** Nuxt.js dev-modules

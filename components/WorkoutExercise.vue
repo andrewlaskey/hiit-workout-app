@@ -3,10 +3,11 @@
     <div class="exercise-heading">
       <strong v-if="isActive">{{ exercise.name }}</strong>
       <span v-else>{{ exercise.name }}</span>
-      <button class="button">
+      <button class="button" @click="isOpen = !isOpen">
         <icon symbol="icon-info" />
       </button>
     </div>
+    <div v-show="isOpen" class="exercise-body content" v-html="mdDescription" />
   </div>
 </template>
 
@@ -30,14 +31,27 @@ export default {
       type: Object,
       default: () => {
         return {
-          name: ''
+          name: '',
+          description: ''
         }
       }
+    }
+  },
+  data() {
+    return {
+      isOpen: false
     }
   },
   computed: {
     isActive() {
       return (this.activeIndex === this.index)
+    },
+    mdDescription() {
+      if (this.exercise && this.exercise.description) {
+        return this.$md(this.exercise.description)
+      }
+
+      return ''
     }
   }
 }
@@ -47,6 +61,7 @@ export default {
 @import './../assets/styles/variables';
 
 .exercise {
+  flex-direction: column;
   padding: 0;
   width: 100%;
 }
@@ -72,5 +87,10 @@ export default {
   &:focus {
     color: $light-blue;
   }
+}
+
+.exercise-body {
+  padding: 1em 0.75em 2em;
+  width: 100%;
 }
 </style>

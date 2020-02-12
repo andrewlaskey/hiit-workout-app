@@ -24,6 +24,7 @@ export default ({ app }, inject) => {
           id
           name
           tags
+          description
         }
       }
     `).then(res => {
