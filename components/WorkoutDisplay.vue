@@ -14,7 +14,12 @@
         <span>Rest</span>
         <span class="is-pulled-right">Round {{ round }} of {{ repeatNum }}</span>
       </div>
-      <span v-if="state === 'complete'">Complete!</span>
+      <div v-if="state === 'complete'" class="workout-display-heading">
+        <span>Complete!</span>
+        <button class="button is-primary is-pulled-right" @click="reset">
+          RESET
+        </button>
+      </div>
     </div>
     <div
       v-if="state === 'ready' && exercises.length > 0"
@@ -95,7 +100,8 @@ export default {
   methods: {
     ...mapActions('workout', [
       'selectExercises',
-      'startWorkout'
+      'startWorkout',
+      'reset'
     ]),
     formatTime
   }
@@ -103,6 +109,12 @@ export default {
 </script>
 
 <style lang="scss">
+  .workout-display-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
   .info-block {
     padding-top: 2rem;
     flex-direction: column;
