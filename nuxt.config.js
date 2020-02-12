@@ -55,6 +55,11 @@ export default {
   */
   axios: {
   },
+
+  env: {
+    DATOCMS_TOKEN: process.env.DATOCMS_TOKEN,
+    DATOCMS_GRAPHQL: process.env.DATOCMS_GRAPHQL
+  },
   /*
   ** Build configuration
   */
