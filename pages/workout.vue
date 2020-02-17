@@ -89,6 +89,7 @@ export default {
 .column {
   padding-left: 0;
   padding-right: 0;
+  padding-bottom: 115px;
   min-height: calc(100vh - 52px);
 
   &:first-child {
@@ -100,7 +101,8 @@ export default {
   }
 
   @media screen and (min-width: 1024px) {
-    min-height: calc(100vh - 56px)
+    padding-bottom: 0;
+    min-height: calc(100vh - 56px);
   }
 }
 
