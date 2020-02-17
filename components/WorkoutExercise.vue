@@ -68,6 +68,7 @@ export default {
 
 .is-active .exercise-heading {
   background-color: $slate;
+  color: $text-strong;
 }
 
 .exercise-heading {
@@ -92,5 +93,6 @@ export default {
 .exercise-body {
   padding: 1em 0.75em 2em;
   width: 100%;
+  color: $text-strong;
 }
 </style>

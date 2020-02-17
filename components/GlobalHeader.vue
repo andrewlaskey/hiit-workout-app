@@ -1,11 +1,11 @@
 <template>
   <nav class="navbar is-dark" role="navigation" aria-label="main navigation">
+    <div class="navbar-brand">
+      <nuxt-link to="/" class="navbar-item">
+        HIIT Generator
+      </nuxt-link>
+    </div>
     <div class="navbar-menu">
-      <div class="navbar-start">
-        <nuxt-link to="/" class="navbar-item">
-          HIIT Generator
-        </nuxt-link>
-      </div>
       <div class="navbar-end">
         <nuxt-link to="/exercises" class="navbar-item">
           Exercises
