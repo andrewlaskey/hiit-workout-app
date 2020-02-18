@@ -7,7 +7,7 @@
             HIIT Generator
           </h1>
           <h2 class="subtitle is-3">
-            High intensity interval training workouts a the click of a button.
+            High intensity interval training workouts at the click of a button.
           </h2>
           <p>
             <nuxt-link class="button is-primary" to="/workout">
@@ -35,7 +35,7 @@
               <div class="column">
                 <p class="is-size-5 has-text-dark">
                   Select the number of exercises per round, rounds to repeat,
-                  rest and work time and which exercise types you want to filter
+                  rest and work time, and which exercise types you want to filter
                   out.
                 </p>
                 <p class="is-size-5 has-text-dark">
