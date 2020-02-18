@@ -31,7 +31,11 @@ export default ({ app }, inject) => {
       if (res.data && res.data.allExercises) {
         return res.data.allExercises.map(exercise => {
           if (exercise.tags) {
-            exercise.tags = exercise.tags.split(', ')
+            exercise.tags = exercise.tags
+              .split(', ')
+              .map(tag => {
+                return tag.trim()
+              })
           }
 
           return exercise

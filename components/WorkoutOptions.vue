@@ -50,6 +50,18 @@
         No Legs
       </label>
     </div>
+    <div class="field">
+      <label class="checkbox">
+        <input type="checkbox" :value="noAdvanced" @input="e => { setAdvancedOption(e.target.checked) }">
+        No Advanced
+      </label>
+    </div>
+    <div class="field">
+      <label class="checkbox">
+        <input type="checkbox" :value="noPlyo" @input="e => { setPlyoOption(e.target.checked) }">
+        No Plyometrics
+      </label>
+    </div>
   </div>
 </template>
 
@@ -66,7 +78,9 @@ export default {
       'noPullupBar',
       'noArms',
       'noCore',
-      'noLegs'
+      'noLegs',
+      'noAdvanced',
+      'noPlyo'
     ])
   },
   methods: {
@@ -78,7 +92,9 @@ export default {
       'setPullupBarOption',
       'setArmOption',
       'setCoreOption',
-      'setLegsOption'
+      'setLegsOption',
+      'setAdvancedOption',
+      'setPlyoOption'
     ])
   }
 }

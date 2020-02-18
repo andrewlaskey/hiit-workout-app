@@ -2,7 +2,9 @@ const TAGS = {
   PULLUP_BAR: 'pull-up-bar',
   ARMS: 'arms',
   CORE: 'core',
-  LEGS: 'legs'
+  LEGS: 'legs',
+  ADVANCED: 'advanced',
+  PLYO: 'plyometrics'
 }
 
 const ONE_SECOND = 1000
@@ -24,6 +26,14 @@ const filterExercises = (exercises, state) => {
     }
 
     if (state.noLegs && tags.indexOf(TAGS.LEGS) > -1) {
+      return false
+    }
+
+    if (state.noAdvanced && tags.indexOf(TAGS.ADVANCED) > -1) {
+      return false
+    }
+
+    if (state.noPlyo && tags.indexOf(TAGS.PLYO) > -1) {
       return false
     }
 
@@ -62,6 +72,8 @@ export const state = () => ({
   noArms: false,
   noCore: false,
   noLegs: false,
+  noPlyo: false,
+  noAdvanced: false,
   allExercises: [],
   filteredExercises: [],
   exercises: [],
@@ -114,6 +126,14 @@ export const mutations = {
 
   setLegsOption(state, payload) {
     state.noLegs = payload
+  },
+
+  setPlyoOption(state, payload) {
+    state.noPlyo = payload
+  },
+
+  setAdvancedOption(state, payload) {
+    state.noAdvanced = payload
   },
 
   setExercises(state, payload) {
