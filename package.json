@@ -35,5 +35,10 @@
     "node-sass": "^4.13.1",
     "sass-loader": "^8.0.2",
     "vue-jest": "^4.0.0-0"
+  },
+  "prettier": {
+    "printWidth": 80,
+    "semi": false,
+    "singleQuote": true
   }
 }

@@ -4,7 +4,7 @@ $slate-darken: #333d5a;
 $bright-red: #f73859;
 $light-blue: #dbedf3;
 $white-ish: #e8edee;
-$grey-ish: #47474D;
+$grey-ish: #47474d;
 
 // // Update Bulma's global variables
 $grey-darker: #20232b;
@@ -15,7 +15,8 @@ $info: $light-blue;
 
 $text: $white-ish;
 $text-strong: $white-ish;
-// $link: $blue;
+$link: $bright-red;
+$link-hover: #912033;
 // $widescreen-enabled: false;
 // $fullhd-enabled: false;
 // $family-primary: 'Source Sans Pro', serif;
