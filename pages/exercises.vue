@@ -62,19 +62,23 @@ export default {
     return {
       exercises,
       tags,
-      selectedTags: [...tags]
+      selectedTags: []
     }
   },
   computed: {
     filteredExercises() {
       if (this.exercises) {
-        return this.exercises.filter(exercise => {
-          const { tags } = exercise
+        if (this.selectedTags.length > 0) {
+          return this.exercises.filter(exercise => {
+            const { tags } = exercise
 
-          return tags.some(tag => {
-            return this.selectedTags.indexOf(tag) > -1
+            return this.selectedTags.every(tag => {
+              return tags.indexOf(tag) > -1
+            })
           })
-        })
+        }
+
+        return this.exercises
       }
 
       return []
@@ -107,6 +111,10 @@ export default {
 // .field.has-addons .button {
 
 // }
+
+.button.is-info.is-active {
+  background: #92cde2;
+}
 
 .exercise {
   margin-bottom: 2rem;
