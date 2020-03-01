@@ -1,7 +1,7 @@
 {
   "name": "hiit-workout-app",
   "version": "1.0.0",
-  "description": "HIIT Workout Generator",
+  "description": "Easily generate random HIIT workouts",
   "author": "Andrew Laskey",
   "private": true,
   "scripts": {
