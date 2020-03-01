@@ -1,27 +1,15 @@
 <template>
   <div class="workout">
     <div class="columns">
-      <div
-        :class="{ 'is-hidden-mobile': mobileState !== 'options' }"
-        class="column is-half"
-      >
+      <div :class="{ 'is-hidden-mobile': mobileState !== 'options' }" class="column is-half">
         <workout-options />
       </div>
-      <div
-        :class="{ 'is-hidden-mobile': mobileState !== 'display' }"
-        class="column is-half"
-      >
+      <div :class="{ 'is-hidden-mobile': mobileState !== 'display' }" class="column is-half">
         <workout-display />
       </div>
     </div>
-    <div
-      v-if="state === 'ready'"
-      class="workout-mobile-ui is-hidden-tablet"
-    >
-      <div
-        v-if="mobileState === 'options'"
-        class="workout-mobile-ui-totals is-hidden-tablet"
-      >
+    <div v-if="state === 'ready'" class="workout-mobile-ui is-hidden-tablet">
+      <div v-if="mobileState === 'options'" class="workout-mobile-ui-totals is-hidden-tablet">
         <span>Total Workout Duration</span>
         <span class="is-pulled-right">{{ formatTime(totalDuration) }}</span>
       </div>
@@ -29,16 +17,12 @@
         v-if="mobileState === 'options'"
         class="button is-info is-medium is-fullwidth"
         @click="mobileState = 'display'"
-      >
-        Next
-      </button>
+      >Next</button>
       <button
         v-if="mobileState === 'display'"
         class="button is-info is-medium is-fullwidth"
         @click="mobileState = 'options'"
-      >
-        Back
-      </button>
+      >Back</button>
     </div>
   </div>
 </template>
@@ -46,6 +30,7 @@
 <script>
 import { mapState, mapGetters } from 'vuex'
 import formatTime from '~/plugins/utils/formatTime'
+import exercisesAsyncData from '~/plugins/utils/exercisesAsyncData'
 import WorkoutOptions from '~/components/WorkoutOptions'
 import WorkoutDisplay from '~/components/WorkoutDisplay'
 
@@ -54,8 +39,8 @@ export default {
     WorkoutOptions,
     WorkoutDisplay
   },
-  async asyncData({ app, store }) {
-    const exercises = await app.$request.getExercises()
+  async asyncData({ app, store, payload }) {
+    const exercises = await exercisesAsyncData(app, store, payload)
 
     store.commit('workout/setAllExercises', exercises)
   },

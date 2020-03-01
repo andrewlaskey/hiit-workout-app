@@ -3,12 +3,10 @@
     <section class="hero is-fullheight">
       <div class="hero-body">
         <div class="container has-text-centered">
-          <h1 class="title is-1">
-            HIIT Generator
-          </h1>
-          <h2 class="subtitle is-3">
-            High intensity interval training workouts at the click of a button.
-          </h2>
+          <h1 class="title is-1">HIIT Generator</h1>
+          <h2
+            class="subtitle is-3"
+          >High intensity interval training workouts at the click of a button.</h2>
           <p>
             <nuxt-link class="button is-primary" to="/workout">
               <strong>START A WORKOUT</strong>
@@ -20,16 +18,16 @@
 
     <section class="section has-background-light">
       <div class="container has-text-dark">
-        <h2 class="title is-2 has-text-dark has-text-centered has-p-bottom-medium">
-          Randomized Workouts in 3 Steps
-        </h2>
+        <h2
+          class="title is-2 has-text-dark has-text-centered has-p-bottom-medium"
+        >Randomized Workouts in 3 Steps</h2>
         <div class="columns is-centered">
           <div class="column is-four-fifths">
-
             <div class="columns is-vcentered has-p-bottom-medium">
               <div class="column is-one-third">
                 <h3 class="title has-text-dark has-text-centered is-spaced">
-                  1<br>Choose Options
+                  1
+                  <br />Choose Options
                 </h3>
               </div>
               <div class="column">
@@ -49,7 +47,8 @@
             <div class="columns is-vcentered has-p-bottom-medium">
               <div class="column is-one-third">
                 <h3 class="title has-text-dark has-text-centered is-spaced">
-                  2<br>Draw Exercises
+                  2
+                  <br />Draw Exercises
                 </h3>
               </div>
               <div class="column">
@@ -64,22 +63,19 @@
             <div class="columns is-vcentered has-p-bottom-medium">
               <div class="column is-one-third">
                 <h3 class="title has-text-dark has-text-centered is-spaced">
-                  3<br>Start!
+                  3
+                  <br />Start!
                 </h3>
               </div>
               <div class="column">
-                <p class="is-size-5 has-text-dark">
-                  Click "Start" and go for it!
-                </p>
+                <p class="is-size-5 has-text-dark">Click "Start" and go for it!</p>
                 <p class="is-size-5 has-text-dark">
                   Take breaks if you need to but try to
                   only rest during the rest period.
                 </p>
               </div>
             </div>
-
           </div>
-
         </div>
       </div>
     </section>
@@ -88,9 +84,7 @@
       <div class="container has-text-dark">
         <div class="columns is-centered">
           <div class="column is-two-thirds">
-            <h2 class="title is-2 has-text-dark has-text-centered is-spaced">
-              Works Like an App
-            </h2>
+            <h2 class="title is-2 has-text-dark has-text-centered is-spaced">Works Like an App</h2>
             <h3 class="subtitle is-5 has-text-dark has-text-centered">
               Save this site to your home screen for a seamless, app-like
               experience.
@@ -104,9 +98,7 @@
       <div class="container">
         <div class="columns is-centered">
           <div class="column is-two-thirds">
-            <h2 class="title is-2 has-text-centered is-spaced">
-              Be Safe!
-            </h2>
+            <h2 class="title is-2 has-text-centered is-spaced">Be Safe!</h2>
             <h3 class="subtitle is-6 has-text-centered">
               Interval workouts are challenging. Know your own limits. While any
               workout may at times be uncomfortable it should never be painful.
@@ -117,20 +109,30 @@
         </div>
       </div>
     </section>
-
   </div>
 </template>
 
 <script>
-export default {
+import exercisesAsyncData from '~/plugins/utils/exercisesAsyncData'
 
+export default {
+  async asyncData({ app, store, payload }) {
+    const exercises = await exercisesAsyncData(app, store, payload)
+
+    store.commit('workout/setAllExercises', exercises)
+  }
 }
 </script>
 
 <style lang="scss" scoped>
 .hero {
-  background: rgb(40,49,73);
-  background: linear-gradient(142deg, rgba(40,49,73,1) 0%, rgba(40,49,73,1) 35%, rgba(85,96,124,1) 100%);
+  background: rgb(40, 49, 73);
+  background: linear-gradient(
+    142deg,
+    rgba(40, 49, 73, 1) 0%,
+    rgba(40, 49, 73, 1) 35%,
+    rgba(85, 96, 124, 1) 100%
+  );
 }
 
 .has-p-bottom-medium {

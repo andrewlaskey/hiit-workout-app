@@ -1,3 +1,4 @@
+import { getExercises } from './plugins/utils/datoConnect'
 
 export default {
   mode: 'universal',
@@ -72,6 +73,28 @@ export default {
         }
       }
     },
+
+    generate: {
+      routes() {
+        return getExercises().then(res => {
+          return [
+            {
+              route: '/exercises',
+              payload: res
+            },
+            {
+              route: '/workout',
+              payload: res
+            },
+            {
+              route: '/',
+              payload: res
+            }
+          ]
+        })
+      }
+    },
+
     /*
     ** You can extend webpack config here
     */
