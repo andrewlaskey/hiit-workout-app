@@ -18,7 +18,7 @@ const request = (query) => {
 export const getExercises = () => {
   return request(`
     query getAllExercises {
-      allExercises {
+      allExercises(first: 99) {
         handle
         id
         name
