@@ -17,6 +17,11 @@
     </div>
     <div class="navbar-menu" :class="{ 'is-mobile-active': isMobileOpen }">
       <div class="navbar-end">
+        <a
+          class="navbar-item"
+          target="_blank"
+          href="https://www.buymeacoffee.com/hittgeneratorapp"
+        >Support</a>
         <nuxt-link to="/exercises" class="navbar-item">Exercises</nuxt-link>
         <div class="navbar-item">
           <nuxt-link to="/workout" class="button is-primary">Workout</nuxt-link>
