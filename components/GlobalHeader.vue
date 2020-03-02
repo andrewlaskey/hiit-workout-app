@@ -5,23 +5,24 @@
       <a
         role="button"
         class="navbar-burger burger"
-        :class="{ 'is-navbar-burger-active': isMobileOpen }"
+        :class="{ 'is-navbar-burger-active': menuOpen }"
         aria-label="menu"
         aria-expanded="false"
-        @click="isMobileOpen = !isMobileOpen"
+        @click="toggleMenu"
       >
         <span aria-hidden="true"></span>
         <span aria-hidden="true"></span>
         <span aria-hidden="true"></span>
       </a>
     </div>
-    <div class="navbar-menu" :class="{ 'is-mobile-active': isMobileOpen }">
+    <div class="navbar-menu" :class="{ 'is-mobile-active': menuOpen }">
       <div class="navbar-end">
         <a
           class="navbar-item"
           target="_blank"
           href="https://www.buymeacoffee.com/hittgeneratorapp"
-        >Support</a>
+          >Support</a
+        >
         <nuxt-link to="/exercises" class="navbar-item">Exercises</nuxt-link>
         <div class="navbar-item">
           <nuxt-link to="/workout" class="button is-primary">Workout</nuxt-link>
@@ -32,11 +33,13 @@
 </template>
 
 <script>
+import { mapState, mapMutations } from 'vuex'
 export default {
-  data() {
-    return {
-      isMobileOpen: false
-    }
+  computed: {
+    ...mapState('menu', ['menuOpen'])
+  },
+  methods: {
+    ...mapMutations('menu', ['toggleMenu'])
   }
 }
 </script>
