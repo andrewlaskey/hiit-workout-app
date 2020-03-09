@@ -49,7 +49,11 @@ export default {
   },
   async asyncData({ app, store, payload }) {
     let tags = []
-    const exercises = await exercisesAsyncData(app, store, payload)
+    const { exercises, workouts } = await exercisesAsyncData(
+      app,
+      store,
+      payload
+    )
 
     if (Array.isArray(exercises)) {
       tags = exercises.reduce((tags, exercise) => {
@@ -58,6 +62,7 @@ export default {
     }
 
     store.commit('workout/setAllExercises', exercises)
+    store.commit('workouts/setWorkouts', workouts)
 
     return {
       exercises,

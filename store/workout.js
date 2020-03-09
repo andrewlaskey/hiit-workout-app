@@ -295,5 +295,31 @@ export const actions = {
     }, ONE_SECOND)
 
     commit('setIntervalRef', interval)
+  },
+
+  presetWorkout({ commit }, options) {
+    const {
+      numExercises = 4,
+      repeatNum = 4,
+      workTimeSeconds = 30,
+      restTimeSeconds = 15,
+      noPullupBar = false,
+      noArms = false,
+      noCore = false,
+      noLegs = false,
+      noPlyo = false,
+      noAdvanced = false
+    } = options
+
+    commit('setNumExercises', numExercises)
+    commit('setRepeatNum', repeatNum)
+    commit('setWorkTimeSeconds', workTimeSeconds)
+    commit('setRestTimeSeconds', restTimeSeconds)
+    commit('setPullupBarOption', noPullupBar)
+    commit('setArmOption', noArms)
+    commit('setCoreOption', noCore)
+    commit('setLegsOption', noLegs)
+    commit('setPlyoOption', noPlyo)
+    commit('setAdvancedOption', noAdvanced)
   }
 }

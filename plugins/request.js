@@ -1,7 +1,8 @@
-import { getExercises } from './utils/datoConnect'
+import { getExercises, getWorkouts } from './utils/datoConnect'
 
 export default ({ app }, inject) => {
   inject('request', {
-    getExercises
+    getExercises,
+    getWorkouts
   })
 }

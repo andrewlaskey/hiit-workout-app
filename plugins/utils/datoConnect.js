@@ -45,3 +45,56 @@ export const getExercises = () => {
     return []
   })
 }
+
+export const getWorkouts = () => {
+  return request(`
+  query getAllWorkouts {
+    allWorkouts(first: 99) {
+      id
+      title
+      handle
+      description
+      numberOfExercises
+      rounds
+      noArms
+      noCore
+      noCore
+      noLegs
+      noPlyo
+      noPlyo
+      noPullupBar
+      workTime
+      restTime
+    }
+  }
+  `).then(res => {
+    if (res.data && res.data.allWorkouts) {
+      return res.data.allWorkouts.map(workout => {
+        const { id, handle, title, description } = workout
+        const options = {
+          numExercises: workout.numberOfExercises,
+          repeatNum: workout.rounds,
+          workTimeSeconds: workout.workTime,
+          restTimeSeconds: workout.restTime,
+          noPullupBar: workout.noPullupBar,
+          noArms: workout.noArms,
+          noCore: workout.noCore,
+          noLegs: workout.noLegs,
+          noPlyo: workout.noPlyo,
+          noAdvanced: workout.noAdvanced
+        }
+
+        return {
+          id,
+          handle,
+          title,
+          description,
+          options
+        }
+      })
+    }
+  }).catch(err => {
+    console.error(err)
+    return []
+  })
+}

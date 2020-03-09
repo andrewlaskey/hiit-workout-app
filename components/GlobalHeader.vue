@@ -21,8 +21,8 @@
           class="navbar-item"
           target="_blank"
           href="https://www.buymeacoffee.com/hittgeneratorapp"
-          >Support</a
-        >
+        >Support</a>
+        <nuxt-link to="/workouts" class="navbar-item">Workouts</nuxt-link>
         <nuxt-link to="/exercises" class="navbar-item">Exercises</nuxt-link>
         <div class="navbar-item">
           <nuxt-link to="/workout" class="button is-primary">Workout</nuxt-link>

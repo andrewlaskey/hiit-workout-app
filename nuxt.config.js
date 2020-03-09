@@ -1,4 +1,4 @@
-import { getExercises } from './plugins/utils/datoConnect'
+import { getExercises, getWorkouts } from './plugins/utils/datoConnect'
 
 export default {
   mode: 'universal',
@@ -80,23 +80,32 @@ export default {
     },
 
     generate: {
-      routes() {
-        return getExercises().then(res => {
-          return [
-            {
-              route: '/exercises',
-              payload: res
-            },
-            {
-              route: '/workout',
-              payload: res
-            },
-            {
-              route: '/',
-              payload: res
-            }
-          ]
-        })
+      async routes() {
+        const exercises = await getExercises()
+        const workouts = await getWorkouts()
+        const payload = {
+          exercises,
+          workouts
+        }
+
+        return [
+          {
+            route: '/exercises',
+            payload
+          },
+          {
+            route: '/workout',
+            payload
+          },
+          {
+            route: '/workouts',
+            payload
+          },
+          {
+            route: '/',
+            payload
+          }
+        ]
       }
     },
 
