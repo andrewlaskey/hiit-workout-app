@@ -16,21 +16,13 @@
       </div>
       <div v-if="state === 'complete'" class="workout-display-heading">
         <span>Complete!</span>
-        <button class="button is-primary is-pulled-right" @click="reset">
-          RESET
-        </button>
+        <button class="button is-primary is-pulled-right" @click="reset">RESET</button>
       </div>
     </div>
-    <div
-      v-if="state === 'ready' && exercises.length > 0"
-      class="panel-block"
-    >
+    <div v-if="state === 'ready' && exercises.length > 0" class="panel-block">
       <button class="button is-primary is-fullwidth" @click="startWorkout">Start</button>
     </div>
-    <div
-      v-if="state !== 'ready' && state !== 'complete'"
-      class="panel-block"
-    >
+    <div v-if="state !== 'ready' && state !== 'complete'" class="panel-block">
       <workout-timer />
     </div>
     <workout-exercise
@@ -40,20 +32,12 @@
       :activeIndex="activeIndex"
       :exercise="exercise"
     />
-    <div
-      v-if="exercises.length === 0 || state === 'ready'"
-      class="panel-block info-block"
-    >
+    <div v-if="exercises.length === 0 || state === 'ready'" class="panel-block info-block">
       <p
         v-if="exercises.length === 0"
         class="has-text-centered"
-      >
-        When you have finished setting up your options, click below to randomly draw this workout's exercises.
-      </p>
-      <button
-        class="button is-info is-fullwidth"
-        @click="selectExercises"
-      >
+      >When you have finished setting up your options, click below to randomly draw this workout's exercises.</p>
+      <button class="button is-info is-fullwidth" @click="selectExercises">
         <span v-if="exercises.length > 0">Redraw</span>
         <span v-else>Draw Exercises</span>
       </button>
@@ -98,35 +82,37 @@ export default {
     }
   },
   methods: {
-    ...mapActions('workout', [
-      'selectExercises',
-      'startWorkout',
-      'reset'
-    ]),
+    ...mapActions('workout', ['selectExercises', 'startWorkout', 'reset']),
     formatTime
   }
 }
 </script>
 
 <style lang="scss">
-  .workout-display-heading {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
+@import './../assets/styles/variables';
 
-  .info-block {
-    padding-top: 2rem;
-    flex-direction: column;
+.panel.is-link .panel-heading {
+  background-color: $blue;
+}
 
-    p {
-      padding: 0 0 1rem;
-      max-width: 80%;
-    }
-  }
+.workout-display-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
 
-  .button {
-    text-transform: uppercase;
-    font-weight: 600;
+.info-block {
+  padding-top: 2rem;
+  flex-direction: column;
+
+  p {
+    padding: 0 0 1rem;
+    max-width: 80%;
   }
+}
+
+.button {
+  text-transform: uppercase;
+  font-weight: 600;
+}
 </style>
