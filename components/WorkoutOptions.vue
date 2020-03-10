@@ -53,51 +53,16 @@
         />
       </div>
     </div>
-    <h5 class="title is-6">Exercise Options</h5>
-    <div class="field">
-      <label class="checkbox">
-        <input
-          type="checkbox"
-          :checked="noPullupBar"
-          @change="e => { setPullupBarOption(e.target.checked) }"
-        />
-        No Pull-up Bar
-      </label>
-    </div>
-    <div class="field">
-      <label class="checkbox">
-        <input type="checkbox" :checked="noArms" @change="e => { setArmOption(e.target.checked) }" />
-        No Arms
-      </label>
-    </div>
-    <div class="field">
-      <label class="checkbox">
-        <input type="checkbox" :checked="noCore" @change="e => { setCoreOption(e.target.checked) }" />
-        No Core
-      </label>
-    </div>
-    <div class="field">
-      <label class="checkbox">
-        <input type="checkbox" :checked="noLegs" @change="e => { setLegsOption(e.target.checked) }" />
-        No Legs
-      </label>
-    </div>
-    <div class="field">
-      <label class="checkbox">
-        <input
-          type="checkbox"
-          :checked="noAdvanced"
-          @change="e => { setAdvancedOption(e.target.checked) }"
-        />
-        No Advanced
-      </label>
-    </div>
-    <div class="field">
-      <label class="checkbox">
-        <input type="checkbox" :checked="noPlyo" @change="e => { setPlyoOption(e.target.checked) }" />
-        No Plyometrics
-      </label>
-    </div>
+    <h5 class="title is-6">Filter Exercises</h5>
+    <button
+      v-for="(tag, index) in tags"
+      :key="index"
+      class="button is-info is-small"
+      :class="{ 'is-active': selectedTags.indexOf(tag) > -1 }"
+      @click="toggleTag(tag)"
+    >
+      <span>{{ tag }}</span>
+    </button>
   </div>
 </template>
 
@@ -105,6 +70,12 @@
 import { mapState, mapMutations } from 'vuex'
 
 export default {
+  props: {
+    tags: {
+      type: Array,
+      default: () => []
+    }
+  },
   computed: {
     ...mapState('workout', [
       'numExercises',
@@ -116,7 +87,8 @@ export default {
       'noCore',
       'noLegs',
       'noAdvanced',
-      'noPlyo'
+      'noPlyo',
+      'selectedTags'
     ])
   },
   methods: {
@@ -130,8 +102,19 @@ export default {
       'setCoreOption',
       'setLegsOption',
       'setAdvancedOption',
-      'setPlyoOption'
-    ])
+      'setPlyoOption',
+      'addSelectedTag',
+      'removeSelectedTag'
+    ]),
+    toggleTag(tag) {
+      const index = this.selectedTags.indexOf(tag)
+
+      if (index > -1) {
+        this.removeSelectedTag(tag)
+      } else {
+        this.addSelectedTag(tag)
+      }
+    }
   }
 }
 </script>
@@ -140,5 +123,14 @@ export default {
 .workout-options {
   position: relative;
   padding: 1em;
+}
+
+.button.is-info {
+  margin-right: 10px;
+  margin-bottom: 10px;
+}
+
+.button.is-info.is-active {
+  background: #92cde2;
 }
 </style>

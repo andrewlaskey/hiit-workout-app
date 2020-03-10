@@ -2,7 +2,7 @@
   <div class="workout">
     <div class="columns">
       <div :class="{ 'is-hidden-mobile': mobileState !== 'options' }" class="column is-half">
-        <workout-options />
+        <workout-options :tags="tags" />
       </div>
       <div :class="{ 'is-hidden-mobile': mobileState !== 'display' }" class="column is-half">
         <workout-display />
@@ -40,14 +40,25 @@ export default {
     WorkoutDisplay
   },
   async asyncData({ app, store, payload }) {
+    let tags = []
     const { exercises, workouts } = await exercisesAsyncData(
       app,
       store,
       payload
     )
 
+    if (Array.isArray(exercises)) {
+      tags = exercises.reduce((tags, exercise) => {
+        return [...new Set(tags.concat(exercise.tags))]
+      }, [])
+    }
+
     store.commit('workout/setAllExercises', exercises)
     store.commit('workouts/setWorkouts', workouts)
+
+    return {
+      tags
+    }
   },
   data() {
     return {

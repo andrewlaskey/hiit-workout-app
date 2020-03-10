@@ -31,7 +31,7 @@ export const getExercises = () => {
       return res.data.allExercises.map(exercise => {
         if (exercise.tags) {
           exercise.tags = exercise.tags
-            .split(', ')
+            .split(',')
             .map(tag => {
               return tag.trim()
             })
@@ -56,32 +56,25 @@ export const getWorkouts = () => {
       description
       numberOfExercises
       rounds
-      noArms
-      noCore
-      noCore
-      noLegs
-      noPlyo
-      noPlyo
-      noPullupBar
       workTime
       restTime
+      selectedTags
     }
   }
   `).then(res => {
     if (res.data && res.data.allWorkouts) {
       return res.data.allWorkouts.map(workout => {
         const { id, handle, title, description } = workout
+        const tags = workout.selectedTags.split(',')
+          .map(tag => {
+            return tag.trim()
+          })
         const options = {
           numExercises: workout.numberOfExercises,
           repeatNum: workout.rounds,
           workTimeSeconds: workout.workTime,
           restTimeSeconds: workout.restTime,
-          noPullupBar: workout.noPullupBar,
-          noArms: workout.noArms,
-          noCore: workout.noCore,
-          noLegs: workout.noLegs,
-          noPlyo: workout.noPlyo,
-          noAdvanced: workout.noAdvanced
+          selectedTags: tags
         }
 
         return {

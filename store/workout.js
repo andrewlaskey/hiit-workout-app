@@ -1,44 +1,26 @@
-const TAGS = {
-  PULLUP_BAR: 'pull-up-bar',
-  ARMS: 'arms',
-  CORE: 'core',
-  LEGS: 'legs',
-  ADVANCED: 'advanced',
-  PLYO: 'plyometrics'
-}
+// const TAGS = {
+//   PULLUP_BAR: 'pull-up-bar',
+//   ARMS: 'arms',
+//   CORE: 'core',
+//   LEGS: 'legs',
+//   ADVANCED: 'advanced',
+//   PLYO: 'plyometrics'
+// }
 
 const ONE_SECOND = 1000
 
 const filterExercises = (exercises, state) => {
-  return exercises.filter(exercise => {
-    const { tags } = exercise
+  if (state.selectedTags.length > 0) {
+    return exercises.filter(exercise => {
+      const { tags } = exercise
 
-    if (state.noPullupBar && tags.indexOf(TAGS.PULLUP_BAR) > -1) {
-      return false
-    }
+      return state.selectedTags.some(tag => {
+        return tags.indexOf(tag) > -1
+      })
+    })
+  }
 
-    if (state.noArms && tags.indexOf(TAGS.ARMS) > -1) {
-      return false
-    }
-
-    if (state.noCore && tags.indexOf(TAGS.CORE) > -1) {
-      return false
-    }
-
-    if (state.noLegs && tags.indexOf(TAGS.LEGS) > -1) {
-      return false
-    }
-
-    if (state.noAdvanced && tags.indexOf(TAGS.ADVANCED) > -1) {
-      return false
-    }
-
-    if (state.noPlyo && tags.indexOf(TAGS.PLYO) > -1) {
-      return false
-    }
-
-    return true
-  })
+  return exercises
 }
 
 const selectRandomExercises = (exercises, total) => {
@@ -82,7 +64,8 @@ export const state = () => ({
   activeIndex: -1,
   intervalRef: null,
   state: 'ready',
-  soundsOn: true
+  soundsOn: true,
+  selectedTags: []
 })
 
 export const getters = {
@@ -190,6 +173,22 @@ export const mutations = {
 
   toggleSounds(state) {
     state.soundsOn = !state.soundsOn
+  },
+
+  setSelectedTags(state, payload) {
+    state.selectedTags = payload
+  },
+
+  addSelectedTag(state, payload) {
+    state.selectedTags.push(payload)
+  },
+
+  removeSelectedTag(state, payload) {
+    const index = state.selectedTags.indexOf(payload)
+
+    if (index > -1) {
+      state.selectedTags.splice(index, 1)
+    }
   }
 }
 
@@ -308,7 +307,8 @@ export const actions = {
       noCore = false,
       noLegs = false,
       noPlyo = false,
-      noAdvanced = false
+      noAdvanced = false,
+      selectedTags = []
     } = options
 
     commit('setNumExercises', numExercises)
@@ -321,5 +321,6 @@ export const actions = {
     commit('setLegsOption', noLegs)
     commit('setPlyoOption', noPlyo)
     commit('setAdvancedOption', noAdvanced)
+    commit('setSelectedTags', selectedTags)
   }
 }
