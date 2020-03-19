@@ -9,7 +9,10 @@
       </div>
     </div>
     <div v-if="state === 'ready'" class="workout-mobile-ui is-hidden-tablet">
-      <div v-if="mobileState === 'options'" class="workout-mobile-ui-totals is-hidden-tablet">
+      <div
+        v-if="mobileState === 'options' && type === 'timed'"
+        class="workout-mobile-ui-totals is-hidden-tablet"
+      >
         <span>Total Workout Duration</span>
         <span class="is-pulled-right">{{ formatTime(totalDuration) }}</span>
       </div>
@@ -48,9 +51,11 @@ export default {
     )
 
     if (Array.isArray(exercises)) {
-      tags = exercises.reduce((tags, exercise) => {
-        return [...new Set(tags.concat(exercise.tags))]
-      }, [])
+      tags = exercises
+        .reduce((tags, exercise) => {
+          return [...new Set(tags.concat(exercise.tags))]
+        }, [])
+        .filter(tag => tag !== 'reps')
     }
 
     store.commit('workout/setAllExercises', exercises)
@@ -66,7 +71,7 @@ export default {
     }
   },
   computed: {
-    ...mapState('workout', ['state']),
+    ...mapState('workout', ['state', 'type']),
     ...mapGetters('workout', ['totalDuration'])
   },
   methods: {

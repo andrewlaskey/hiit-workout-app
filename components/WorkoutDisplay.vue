@@ -1,13 +1,17 @@
 <template>
   <div class="panel" :class="panelClass">
     <div class="panel-heading">
-      <div v-if="state === 'ready'">
+      <div v-if="state === 'ready' && type === 'timed'">
         <span>Total Workout Duration</span>
         <span class="is-pulled-right">{{ formatTime(totalDuration) }}</span>
       </div>
+      <div v-if="state === 'ready' && type === 'reps'">
+        <span>Random Reps Workout</span>
+      </div>
       <span v-if="state === 'countdown'">Get Ready!</span>
       <div v-if="state === 'work'">
-        <span>Work</span>
+        <span v-if="type === 'timed'">Work</span>
+        <span v-if="type === 'reps'">{{ formatTime(timer) }}</span>
         <span class="is-pulled-right">Round {{ round }} of {{ repeatNum }}</span>
       </div>
       <div v-if="state === 'rest'">
@@ -16,6 +20,7 @@
       </div>
       <div v-if="state === 'complete'" class="workout-display-heading">
         <span>Complete!</span>
+        <span v-if="type === 'reps'">Total Time: {{ formatTime(timer) }}</span>
         <button class="button is-primary is-pulled-right" @click="reset">RESET</button>
       </div>
     </div>
@@ -24,6 +29,9 @@
     </div>
     <div v-if="state !== 'ready' && state !== 'complete'" class="panel-block">
       <workout-timer />
+    </div>
+    <div v-if="state !== 'ready' && state !== 'complete' && type === 'reps'" class="panel-block">
+      <button class="button is-primary is-fullwidth" @click="endRound">Next</button>
     </div>
     <workout-exercise
       v-for="(exercise, index) in exercises"
@@ -58,6 +66,7 @@ export default {
   },
   computed: {
     ...mapState('workout', [
+      'type',
       'repeatNum',
       'exercises',
       'timer',
@@ -82,7 +91,12 @@ export default {
     }
   },
   methods: {
-    ...mapActions('workout', ['selectExercises', 'startWorkout', 'reset']),
+    ...mapActions('workout', [
+      'selectExercises',
+      'startWorkout',
+      'reset',
+      'endRound'
+    ]),
     formatTime
   }
 }

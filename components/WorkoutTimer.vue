@@ -6,7 +6,13 @@
     <button v-if="!isPlaying" class="button" @click="play">
       <icon symbol="icon-play_arrow" />
     </button>
-    <p class="is-size-1 has-text-centered">{{ formatTime(timer) }}</p>
+    <div v-if="type === 'reps'" class="rep-count">
+      <p class="is-size-1 has-text-centered">
+        {{ repCount }}
+        <small>reps</small>
+      </p>
+    </div>
+    <p v-if="type === 'timed'" class="is-size-1 has-text-centered">{{ formatTime(timer) }}</p>
     <div class="buttons">
       <button class="button" @click="reset">
         <icon symbol="icon-replay" />
@@ -29,10 +35,7 @@ export default {
     Icon
   },
   computed: {
-    ...mapState('workout', [
-      'timer',
-      'soundsOn'
-    ]),
+    ...mapState('workout', ['type', 'timer', 'soundsOn', 'repCount']),
     ...mapGetters('workout', ['isPlaying'])
   },
   methods: {

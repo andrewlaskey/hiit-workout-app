@@ -46,6 +46,7 @@ const selectRandomExercises = (exercises, total) => {
 }
 
 export const state = () => ({
+  type: 'timed',
   numExercises: 4,
   repeatNum: 4,
   workTimeSeconds: 30,
@@ -63,6 +64,7 @@ export const state = () => ({
   round: 1,
   activeIndex: -1,
   intervalRef: null,
+  repCount: 0,
   state: 'ready',
   soundsOn: true,
   selectedTags: []
@@ -79,6 +81,10 @@ export const getters = {
 }
 
 export const mutations = {
+  setWorkoutType(state, payload) {
+    state.type = payload
+  },
+
   setNumExercises(state, payload) {
     state.numExercises = parseInt(payload, 10)
   },
@@ -147,6 +153,10 @@ export const mutations = {
     state.timer--
   },
 
+  plusOneSecond(state) {
+    state.timer++
+  },
+
   setRound(state, payload) {
     state.round = payload
   },
@@ -189,6 +199,10 @@ export const mutations = {
     if (index > -1) {
       state.selectedTags.splice(index, 1)
     }
+  },
+
+  setRepCount(state, payload) {
+    state.repCount = payload
   }
 }
 
@@ -220,31 +234,44 @@ export const actions = {
       dispatch('selectExercises')
     }
 
-    commit('setTimer', 10)
-    commit('setState', 'countdown')
+    if (state.type === 'timed') {
+      commit('setTimer', 10)
+      commit('setState', 'countdown')
+    } else {
+      commit('setTimer', 0)
+      commit('setState', 'work')
+      dispatch('setRandomRepCount')
+      commit('setActiveIndex', 0)
+    }
+
     dispatch('play')
   },
 
   startWorkInterval({ state, commit, app }) {
-    commit('setState', 'work')
-    commit('setTimer', state.workTimeSeconds)
+    if (state.type === 'timed') {
+      commit('setState', 'work')
+      commit('setTimer', state.workTimeSeconds)
 
-    if (state.soundsOn) {
-      this.$sounds.playRoundStart()
+      if (state.soundsOn) {
+        this.$sounds.playRoundStart()
+      }
     }
   },
 
   startRestInterval({ state, commit }) {
-    commit('setState', 'rest')
-    commit('setTimer', state.restTimeSeconds)
+    if (state.type === 'timed') {
+      commit('setState', 'rest')
+      commit('setTimer', state.restTimeSeconds)
 
-    if (state.soundsOn) {
-      this.$sounds.playRoundStart()
+      if (state.soundsOn) {
+        this.$sounds.playRoundStart()
+      }
     }
   },
 
   endRound({ state, commit, dispatch }) {
     commit('nextActiveIndex')
+    dispatch('setRandomRepCount')
 
     if (state.activeIndex >= state.numExercises) {
       commit('nextRound')
@@ -283,14 +310,22 @@ export const actions = {
     }
   },
 
+  countup({ state, commit }) {
+    commit('plusOneSecond')
+  },
+
   pause({ state, commit }) {
     clearInterval(state.intervalRef)
     commit('setIntervalRef', null)
   },
 
-  play({ commit, dispatch }) {
+  play({ state, commit, dispatch }) {
     const interval = setInterval(() => {
-      dispatch('countdown')
+      if (state.type === 'timed') {
+        dispatch('countdown')
+      } else {
+        dispatch('countup')
+      }
     }, ONE_SECOND)
 
     commit('setIntervalRef', interval)
@@ -298,6 +333,7 @@ export const actions = {
 
   presetWorkout({ commit }, options) {
     const {
+      type = 'timed',
       numExercises = 4,
       repeatNum = 4,
       workTimeSeconds = 30,
@@ -311,6 +347,7 @@ export const actions = {
       selectedTags = []
     } = options
 
+    commit('setWorkoutType', type)
     commit('setNumExercises', numExercises)
     commit('setRepeatNum', repeatNum)
     commit('setWorkTimeSeconds', workTimeSeconds)
@@ -322,5 +359,19 @@ export const actions = {
     commit('setPlyoOption', noPlyo)
     commit('setAdvancedOption', noAdvanced)
     commit('setSelectedTags', selectedTags)
+  },
+
+  setRandomRepCount({ state, commit }) {
+    let min = state.restTimeSeconds
+    const max = state.workTimeSeconds
+
+    if (min > max) {
+      commit('setRestTimeSeconds', max)
+      min = max
+    }
+
+    const ran = Math.floor(Math.random() * (max - min)) + min
+
+    commit('setRepCount', ran)
   }
 }
