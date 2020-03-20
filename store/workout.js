@@ -10,12 +10,29 @@
 const ONE_SECOND = 1000
 
 const filterExercises = (exercises, state) => {
-  if (state.selectedTags.length > 0) {
-    return exercises.filter(exercise => {
-      const { tags } = exercise
+  const include = includeExercises(exercises, state.selectedTags)
+  const exclude = excludeExercises(include, state.excludeTags)
 
-      return state.selectedTags.some(tag => {
-        return tags.indexOf(tag) > -1
+  return exclude
+}
+
+const includeExercises = (exercises, tags) => {
+  if (tags.length > 0) {
+    return exercises.filter(exercise => {
+      return tags.every(tag => {
+        return exercise.tags.indexOf(tag) > -1
+      })
+    })
+  }
+
+  return exercises
+}
+
+const excludeExercises = (exercises, tags) => {
+  if (tags.length > 0) {
+    return exercises.filter(exercise => {
+      return !tags.some(tag => {
+        return exercise.tags.indexOf(tag) > -1
       })
     })
   }
@@ -67,7 +84,8 @@ export const state = () => ({
   repCount: 0,
   state: 'ready',
   soundsOn: true,
-  selectedTags: []
+  selectedTags: [],
+  excludeTags: []
 })
 
 export const getters = {
@@ -203,6 +221,18 @@ export const mutations = {
 
   setRepCount(state, payload) {
     state.repCount = payload
+  },
+
+  addExcludeTag(state, payload) {
+    state.excludeTags.push(payload)
+  },
+
+  removeExcludeTag(state, payload) {
+    const index = state.excludeTags.indexOf(payload)
+
+    if (index > -1) {
+      state.excludeTags.splice(index, 1)
+    }
   }
 }
 

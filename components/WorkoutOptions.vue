@@ -97,7 +97,8 @@
         </div>
       </div>
     </div>
-    <h5 class="title is-6">Filter Exercises</h5>
+    <h4 class="title is-5 p-top-2">Filters</h4>
+    <h5 class="title is-6">Include Tags</h5>
     <button
       v-for="(tag, index) in tags"
       :key="index"
@@ -106,6 +107,16 @@
       @click="toggleTag(tag)"
     >
       <span>{{ tag }}</span>
+    </button>
+    <h5 class="title is-6 p-top-1">Exclude Tags</h5>
+    <button
+      v-for="(excludeTag, excludeIndex) in tags"
+      :key="`exclude-${excludeIndex}`"
+      class="button is-info is-small"
+      :class="{ 'is-active': excludeTags.indexOf(excludeTag) > -1 }"
+      @click="toggleExcludeTag(excludeTag)"
+    >
+      <span>{{ excludeTag }}</span>
     </button>
   </div>
 </template>
@@ -133,7 +144,8 @@ export default {
       'noLegs',
       'noAdvanced',
       'noPlyo',
-      'selectedTags'
+      'selectedTags',
+      'excludeTags'
     ])
   },
   methods: {
@@ -150,7 +162,9 @@ export default {
       'setAdvancedOption',
       'setPlyoOption',
       'addSelectedTag',
-      'removeSelectedTag'
+      'removeSelectedTag',
+      'addExcludeTag',
+      'removeExcludeTag'
     ]),
     toggleTag(tag) {
       const index = this.selectedTags.indexOf(tag)
@@ -159,6 +173,15 @@ export default {
         this.removeSelectedTag(tag)
       } else {
         this.addSelectedTag(tag)
+      }
+    },
+    toggleExcludeTag(tag) {
+      const index = this.excludeTags.indexOf(tag)
+
+      if (index > -1) {
+        this.removeExcludeTag(tag)
+      } else {
+        this.addExcludeTag(tag)
       }
     },
     updateWorkoutType(type) {
