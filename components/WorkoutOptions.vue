@@ -42,30 +42,36 @@
       </div>
     </div>
     <div v-if="type === 'reps'">
-      <div class="field">
-        <label class="label">Max Reps</label>
-        <div class="control">
-          <input
-            class="input"
-            type="number"
-            min="1"
-            max="15"
-            :value="workTimeSeconds"
-            @input="e => { setWorkTimeSeconds(e.target.value) }"
-          />
+      <div class="columns">
+        <div class="column is-half">
+          <div class="field">
+            <label class="label">Minimum Reps</label>
+            <div class="control">
+              <input
+                class="input"
+                type="number"
+                min="1"
+                max="15"
+                :value="restTimeSeconds"
+                @input="e => { setRestTimeSeconds(e.target.value) }"
+              />
+            </div>
+          </div>
         </div>
-      </div>
-      <div class="field">
-        <label class="label">Minimum Reps</label>
-        <div class="control">
-          <input
-            class="input"
-            type="number"
-            min="1"
-            max="15"
-            :value="restTimeSeconds"
-            @input="e => { setRestTimeSeconds(e.target.value) }"
-          />
+        <div class="column is-half">
+          <div class="field">
+            <label class="label">Max Reps</label>
+            <div class="control">
+              <input
+                class="input"
+                type="number"
+                min="1"
+                max="15"
+                :value="workTimeSeconds"
+                @input="e => { setWorkTimeSeconds(e.target.value) }"
+              />
+            </div>
+          </div>
         </div>
       </div>
     </div>
