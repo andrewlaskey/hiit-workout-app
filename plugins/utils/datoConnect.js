@@ -1,18 +1,18 @@
+import axios from 'axios'
+
 const request = (query) => {
-  return fetch(
-    process.env.DATOCMS_GRAPHQL,
-    {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Accept: 'application/json',
-        Authorization: `Bearer ${process.env.DATOCMS_TOKEN}`
-      },
-      body: JSON.stringify({
-        query
-      })
-    })
-    .then(res => res.json())
+  return axios({
+    method: 'post',
+    url: process.env.DATOCMS_GRAPHQL,
+    data: {
+      query
+    },
+    headers: {
+      'Content-Type': 'application/json',
+      Accept: 'application/json',
+      Authorization: `Bearer ${process.env.DATOCMS_TOKEN}`
+    }
+  })
 }
 
 export const getExercises = () => {
@@ -27,8 +27,8 @@ export const getExercises = () => {
       }
     }
   `).then(res => {
-    if (res.data && res.data.allExercises) {
-      return res.data.allExercises.map(exercise => {
+    if (res.data && res.data.data && res.data.data.allExercises) {
+      return res.data.data.allExercises.map(exercise => {
         if (exercise.tags) {
           exercise.tags = exercise.tags
             .split(',')
@@ -62,8 +62,8 @@ export const getWorkouts = () => {
     }
   }
   `).then(res => {
-    if (res.data && res.data.allWorkouts) {
-      return res.data.allWorkouts.map(workout => {
+    if (res.data && res.data.data && res.data.data.allWorkouts) {
+      return res.data.data.allWorkouts.map(workout => {
         const { id, handle, title, description } = workout
         const tags = workout.selectedTags.split(',')
           .map(tag => {

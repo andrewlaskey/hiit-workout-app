@@ -1,4 +1,5 @@
-import { getExercises, getWorkouts } from './plugins/utils/datoConnect'
+import generateRoutes from './plugins/generateRoutes'
+require('dotenv').config()
 
 export default {
   mode: 'universal',
@@ -67,6 +68,10 @@ export default {
     middleware: 'menu'
   },
 
+  generate: {
+    routes: generateRoutes
+  },
+
   /*
   ** Build configuration
   */
@@ -76,36 +81,6 @@ export default {
         features: {
           customProperties: false
         }
-      }
-    },
-
-    generate: {
-      async routes() {
-        const exercises = await getExercises()
-        const workouts = await getWorkouts()
-        const payload = {
-          exercises,
-          workouts
-        }
-
-        return [
-          {
-            route: '/exercises',
-            payload
-          },
-          {
-            route: '/workout',
-            payload
-          },
-          {
-            route: '/workouts',
-            payload
-          },
-          {
-            route: '/',
-            payload
-          }
-        ]
       }
     },
 
