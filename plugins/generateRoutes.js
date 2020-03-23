@@ -16,8 +16,6 @@ export default async () => {
       }
     })
 
-    console.log(exerciseRoutes)
-
     return [
       {
         route: '/exercises',
