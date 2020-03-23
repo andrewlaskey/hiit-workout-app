@@ -14,20 +14,26 @@
             <span>{{ tag }}</span>
           </button>
         </div>
+        <p>Showing {{ filteredExercises.length }} of {{ exercises.length }}</p>
       </div>
     </section>
     <section class="section">
       <div class="container">
         <div class="columns">
           <div class="column is-half">
-            <div v-for="exercise in filteredExercises" :key="exercise.id" class="exercise">
+            <div
+              v-for="exercise in filteredExercises"
+              :key="exercise.id"
+              class="exercise"
+            >
               <h3 class="title is-3">{{ exercise.name }}</h3>
               <div class="tags">
                 <span
                   v-for="(tag, index) in exercise.tags"
                   :key="index"
                   class="tag is-info"
-                >{{ tag }}</span>
+                  >{{ tag }}</span
+                >
               </div>
               <div class="content" v-html="mdDescription(exercise)" />
             </div>
