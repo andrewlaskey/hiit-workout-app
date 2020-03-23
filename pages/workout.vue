@@ -38,6 +38,7 @@ import WorkoutOptions from '~/components/WorkoutOptions'
 import WorkoutDisplay from '~/components/WorkoutDisplay'
 
 export default {
+  layout: 'workout-layout',
   components: {
     WorkoutOptions,
     WorkoutDisplay
