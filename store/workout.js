@@ -403,5 +403,21 @@ export const actions = {
     const ran = Math.floor(Math.random() * (max - min)) + min
 
     commit('setRepCount', ran)
+  },
+
+  setExercisesFromHandles({ state, commit }, payload) {
+    if (Array.isArray(payload)) {
+      payload.forEach(handle => {
+        const exercise = state.allExercises.find(exercise => {
+          return exercise.handle === handle
+        })
+
+        console.log(exercise)
+
+        if (exercise) {
+          commit('addExercise', exercise)
+        }
+      })
+    }
   }
 }

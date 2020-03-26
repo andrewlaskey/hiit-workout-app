@@ -1,10 +1,16 @@
 <template>
   <div class="workout">
     <div class="columns">
-      <div :class="{ 'is-hidden-mobile': mobileState !== 'options' }" class="column is-half">
+      <div
+        :class="{ 'is-hidden-mobile': mobileState !== 'options' }"
+        class="column is-half"
+      >
         <workout-options :tags="tags" />
       </div>
-      <div :class="{ 'is-hidden-mobile': mobileState !== 'display' }" class="column is-half">
+      <div
+        :class="{ 'is-hidden-mobile': mobileState !== 'display' }"
+        class="column is-half"
+      >
         <workout-display />
       </div>
     </div>
@@ -20,12 +26,16 @@
         v-if="mobileState === 'options'"
         class="button is-info is-medium is-fullwidth"
         @click="mobileState = 'display'"
-      >Next</button>
+      >
+        Next
+      </button>
       <button
         v-if="mobileState === 'display'"
         class="button is-info is-medium is-fullwidth"
         @click="mobileState = 'options'"
-      >Back</button>
+      >
+        Back
+      </button>
     </div>
   </div>
 </template>
@@ -75,8 +85,67 @@ export default {
     ...mapState('workout', ['state', 'type']),
     ...mapGetters('workout', ['totalDuration'])
   },
+  created() {
+    this.getQueryParams()
+  },
   methods: {
-    formatTime
+    formatTime,
+    validateQuery(query) {
+      if (typeof query.t === 'undefined') {
+        return false
+      }
+
+      if (typeof query.n === 'undefined') {
+        return false
+      }
+
+      if (typeof query.r === 'undefined') {
+        return false
+      }
+
+      if (typeof query.wt === 'undefined') {
+        return false
+      }
+
+      if (typeof query.rt === 'undefined') {
+        return false
+      }
+
+      if (typeof query.st === 'undefined') {
+        return false
+      }
+
+      if (typeof query.et === 'undefined') {
+        return false
+      }
+
+      return true
+    },
+    getQueryParams() {
+      if (this.validateQuery(this.$route.query)) {
+        const { t, n, r, wt, rt, st, et, ex } = this.$route.query
+        const queryObject = {
+          type: t,
+          numExercises: n,
+          repeatNum: r,
+          workTimeSeconds: wt,
+          restTimeSeconds: rt,
+          selectedTags: st,
+          excludeTags: et
+        }
+
+        queryObject.selectedTags = queryObject.selectedTags.split(',')
+        queryObject.excludeTags = queryObject.excludeTags.split(',')
+
+        this.$store.dispatch('workout/presetWorkout', queryObject)
+
+        if (typeof ex !== 'undefined') {
+          const handles = ex.split(',')
+
+          this.$store.dispatch('workout/setExercisesFromHandles', handles)
+        }
+      }
+    }
   }
 }
 </script>

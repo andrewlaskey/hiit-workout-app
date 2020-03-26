@@ -1,18 +1,25 @@
 <template>
   <div class="workout-options">
-    <h3 class="title is-size-5">Select Options</h3>
+    <h3 class="title is-size-5">
+      <span>Select Options</span>
+      <button @click="share">Share</button>
+    </h3>
     <div class="field">
       <div class="control">
         <button
           class="button is-info"
           :class="{ 'is-active': type === 'timed' }"
           @click="updateWorkoutType('timed')"
-        >Timed Workout</button>
+        >
+          Timed Workout
+        </button>
         <button
           class="button is-info"
           :class="{ 'is-active': type === 'reps' }"
           @click="updateWorkoutType('reps')"
-        >Rep Workout</button>
+        >
+          Rep Workout
+        </button>
       </div>
     </div>
     <div class="field">
@@ -24,7 +31,11 @@
           min="1"
           max="10"
           :value="numExercises"
-          @input="e => { setNumExercises(e.target.value) }"
+          @input="
+            e => {
+              setNumExercises(e.target.value)
+            }
+          "
         />
       </div>
     </div>
@@ -37,7 +48,11 @@
           min="1"
           max="20"
           :value="repeatNum"
-          @input="e => { setRepeatNum(e.target.value) }"
+          @input="
+            e => {
+              setRepeatNum(e.target.value)
+            }
+          "
         />
       </div>
     </div>
@@ -53,7 +68,11 @@
                 min="1"
                 max="15"
                 :value="restTimeSeconds"
-                @input="e => { setRestTimeSeconds(e.target.value) }"
+                @input="
+                  e => {
+                    setRestTimeSeconds(e.target.value)
+                  }
+                "
               />
             </div>
           </div>
@@ -68,7 +87,11 @@
                 min="1"
                 max="15"
                 :value="workTimeSeconds"
-                @input="e => { setWorkTimeSeconds(e.target.value) }"
+                @input="
+                  e => {
+                    setWorkTimeSeconds(e.target.value)
+                  }
+                "
               />
             </div>
           </div>
@@ -85,7 +108,11 @@
             min="1"
             max="60"
             :value="workTimeSeconds"
-            @input="e => { setWorkTimeSeconds(e.target.value) }"
+            @input="
+              e => {
+                setWorkTimeSeconds(e.target.value)
+              }
+            "
           />
         </div>
       </div>
@@ -98,7 +125,11 @@
             min="1"
             max="60"
             :value="restTimeSeconds"
-            @input="e => { setRestTimeSeconds(e.target.value) }"
+            @input="
+              e => {
+                setRestTimeSeconds(e.target.value)
+              }
+            "
           />
         </div>
       </div>
@@ -202,6 +233,9 @@ export default {
         this.setRestTimeSeconds(15)
         this.removeSelectedTag('reps')
       }
+    },
+    share() {
+      this.$shareUrl()
     }
   }
 }

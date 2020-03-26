@@ -33,7 +33,8 @@ export default {
   plugins: [
     '~/plugins/sounds.js',
     '~/plugins/request.js',
-    '~/plugins/markdown.js'
+    '~/plugins/markdown.js',
+    { src: '~/plugins/shareUrl.js', mode: 'client' }
   ],
   /*
   ** Nuxt.js dev-modules
@@ -65,7 +66,7 @@ export default {
   },
 
   router: {
-    middleware: 'menu'
+    middleware: ['menu']
   },
 
   generate: {
