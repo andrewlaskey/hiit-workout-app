@@ -223,6 +223,10 @@ export const mutations = {
     state.repCount = payload
   },
 
+  setExcludeTag(state, payload) {
+    state.excludeTags = payload
+  },
+
   addExcludeTag(state, payload) {
     state.excludeTags.push(payload)
   },
@@ -374,7 +378,8 @@ export const actions = {
       noLegs = false,
       noPlyo = false,
       noAdvanced = false,
-      selectedTags = []
+      selectedTags = [],
+      excludeTags = []
     } = options
 
     commit('setWorkoutType', type)
@@ -389,6 +394,7 @@ export const actions = {
     commit('setPlyoOption', noPlyo)
     commit('setAdvancedOption', noAdvanced)
     commit('setSelectedTags', selectedTags)
+    commit('setExcludeTags', excludeTags)
   },
 
   setRandomRepCount({ state, commit }) {

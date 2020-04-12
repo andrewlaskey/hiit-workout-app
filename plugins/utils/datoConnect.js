@@ -59,6 +59,7 @@ export const getWorkouts = () => {
       workTime
       restTime
       selectedTags
+      excludeTags
     }
   }
   `).then(res => {
@@ -69,12 +70,19 @@ export const getWorkouts = () => {
           .map(tag => {
             return tag.trim()
           })
+          .filter(tag => tag.length > 0)
+        const excludeTags = workout.excludeTags.split(', ')
+          .map(tag => {
+            return tag.trim()
+          })
+          .filter(tag => tag.length > 0)
         const options = {
           numExercises: workout.numberOfExercises,
           repeatNum: workout.rounds,
           workTimeSeconds: workout.workTime,
           restTimeSeconds: workout.restTime,
-          selectedTags: tags
+          selectedTags: tags,
+          excludeTags
         }
 
         return {
