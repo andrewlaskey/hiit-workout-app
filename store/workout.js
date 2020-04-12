@@ -223,7 +223,7 @@ export const mutations = {
     state.repCount = payload
   },
 
-  setExcludeTag(state, payload) {
+  setExcludeTags(state, payload) {
     state.excludeTags = payload
   },
 

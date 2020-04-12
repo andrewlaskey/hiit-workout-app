@@ -3,25 +3,37 @@
     <section class="section">
       <div class="container">
         <h1 class="title is-1">Workouts</h1>
-        <h2
-          class="subtitle is-4"
-        >Preset workout configurations for getting started with the right routine quickly</h2>
+        <h2 class="subtitle is-4">
+          Preset workout configurations for getting started with the right
+          routine quickly
+        </h2>
       </div>
     </section>
     <section class="section">
       <div class="container">
         <div class="columns is-multiline">
-          <div v-for="workout in workouts" :key="workout.id" class="column is-one-third">
+          <div
+            v-for="workout in workouts"
+            :key="workout.id"
+            class="column is-one-third"
+          >
             <div class="card">
               <div class="card-content">
                 <h3 class="title is-4 has-text-dark">{{ workout.title }}</h3>
-                <p>{{ mdDescription(workout) }}</p>
+                <div
+                  class="subtitle is-6 has-text-dark"
+                  v-html="mdDescription(workout)"
+                />
                 <p>
-                  <strong class="has-text-dark">Duration: {{ formatTime(totalDuration(workout)) }}</strong>
+                  <strong class="has-text-dark"
+                    >Duration: {{ formatTime(totalDuration(workout)) }}</strong
+                  >
                   <button
                     class="button is-primary is-pulled-right"
                     @click="startWorkout(workout)"
-                  >Start</button>
+                  >
+                    Start
+                  </button>
                 </p>
               </div>
             </div>
@@ -86,5 +98,4 @@ export default {
 }
 </script>
 
-<style>
-</style>
+<style></style>
