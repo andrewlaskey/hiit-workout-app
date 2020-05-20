@@ -305,7 +305,10 @@ export const actions = {
 
   endRound({ state, commit, dispatch }) {
     commit('nextActiveIndex')
-    dispatch('setRandomRepCount')
+
+    if (state.type === 'reps') {
+      dispatch('setRandomRepCount')
+    }
 
     if (state.activeIndex >= state.numExercises) {
       commit('nextRound')
