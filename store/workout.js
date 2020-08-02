@@ -90,7 +90,7 @@ export const state = () => ({
 
 export const getters = {
   totalDuration(state) {
-    return (state.workTimeSeconds + state.restTimeSeconds) * state.numExercises * state.repeatNum
+    return ((state.workTimeSeconds + state.restTimeSeconds) * state.numExercises * state.repeatNum) - state.restTimeSeconds
   },
 
   isPlaying(state) {
@@ -344,7 +344,14 @@ export const actions = {
           dispatch('startWorkInterval')
           break
         case 'work':
-          dispatch('startRestInterval')
+          if (
+            state.activeIndex + 1 === state.numExercises &&
+            state.round === state.repeatNum
+          ) {
+            dispatch('endRound')
+          } else {
+            dispatch('startRestInterval')
+          }
           break
         case 'rest':
           dispatch('endRound')

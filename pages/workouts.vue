@@ -82,7 +82,10 @@ export default {
           workTimeSeconds,
           restTimeSeconds
         } = options
-        return (workTimeSeconds + restTimeSeconds) * numExercises * repeatNum
+        return (
+          (workTimeSeconds + restTimeSeconds) * numExercises * repeatNum -
+          restTimeSeconds
+        )
       }
 
       return 0
