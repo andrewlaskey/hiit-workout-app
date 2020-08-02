@@ -33,7 +33,8 @@ export default {
   plugins: [
     '~/plugins/sounds.js',
     '~/plugins/request.js',
-    '~/plugins/markdown.js'
+    '~/plugins/markdown.js',
+    '~/plugins/noSleep.client.js'
   ],
   /*
   ** Nuxt.js dev-modules

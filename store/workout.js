@@ -315,16 +315,22 @@ export const actions = {
       commit('setActiveIndex', 0)
 
       if (state.round > state.repeatNum) {
-        commit('setState', 'complete')
-        clearInterval(state.intervalRef)
-        if (state.soundsOn) {
-          this.$sounds.playComplete()
-        }
+        dispatch('completeWorkout')
       } else {
         dispatch('startWorkInterval')
       }
     } else {
       dispatch('startWorkInterval')
+    }
+  },
+
+  completeWorkout({ state, commit }) {
+    this.$noSleep.disable()
+
+    commit('setState', 'complete')
+    clearInterval(state.intervalRef)
+    if (state.soundsOn) {
+      this.$sounds.playComplete()
     }
   },
 
