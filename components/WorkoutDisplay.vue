@@ -12,39 +12,26 @@
       <div v-if="state === 'work'">
         <span v-if="type === 'timed'">Work</span>
         <span v-if="type === 'reps'">{{ formatTime(timer) }}</span>
-        <span class="is-pulled-right"
-          >Round {{ round }} of {{ repeatNum }}</span
-        >
+        <span class="is-pulled-right">Round {{ round }} of {{ repeatNum }}</span>
       </div>
       <div v-if="state === 'rest'">
         <span>Rest</span>
-        <span class="is-pulled-right"
-          >Round {{ round }} of {{ repeatNum }}</span
-        >
+        <span class="is-pulled-right">Round {{ round }} of {{ repeatNum }}</span>
       </div>
       <div v-if="state === 'complete'" class="workout-display-heading">
         <span>Complete!</span>
         <span v-if="type === 'reps'">Total Time: {{ formatTime(timer) }}</span>
-        <button class="button is-primary is-pulled-right" @click="reset">
-          RESET
-        </button>
+        <button class="button is-primary is-pulled-right" @click="reset">RESET</button>
       </div>
     </div>
     <div v-if="state === 'ready' && exercises.length > 0" class="panel-block">
-      <button class="button is-primary is-fullwidth" @click="clickStartWorkout">
-        Start
-      </button>
+      <button class="button is-primary is-fullwidth" @click="clickStartWorkout">Start</button>
     </div>
     <div v-if="state !== 'ready' && state !== 'complete'" class="panel-block">
       <workout-timer />
     </div>
-    <div
-      v-if="state !== 'ready' && state !== 'complete' && type === 'reps'"
-      class="panel-block"
-    >
-      <button class="button is-primary is-fullwidth" @click="endRound">
-        Next
-      </button>
+    <div v-if="state !== 'ready' && state !== 'complete' && type === 'reps'" class="panel-block">
+      <button class="button is-primary is-fullwidth" @click="endRound">Next</button>
     </div>
     <workout-exercise
       v-for="(exercise, index) in exercises"
@@ -53,10 +40,7 @@
       :activeIndex="activeIndex"
       :exercise="exercise"
     />
-    <div
-      v-if="exercises.length === 0 || state === 'ready'"
-      class="panel-block info-block"
-    >
+    <div v-if="exercises.length === 0 || state === 'ready'" class="panel-block info-block">
       <p v-if="exercises.length === 0" class="has-text-centered">
         When you have finished setting up your options, click below to randomly
         draw this workout's exercises.
@@ -78,7 +62,7 @@ import WorkoutExercise from '~/components/WorkoutExercise'
 export default {
   components: {
     WorkoutTimer,
-    WorkoutExercise
+    WorkoutExercise,
   },
   computed: {
     ...mapState('workout', [
@@ -88,7 +72,7 @@ export default {
       'timer',
       'round',
       'activeIndex',
-      'state'
+      'state',
     ]),
     ...mapGetters('workout', ['totalDuration']),
     panelClass() {
@@ -104,21 +88,21 @@ export default {
       }
 
       return ''
-    }
+    },
   },
   methods: {
     ...mapActions('workout', [
       'selectExercises',
       'startWorkout',
       'reset',
-      'endRound'
+      'endRound',
     ]),
     formatTime,
     clickStartWorkout() {
-      this.$noSleep.enable()
+      // this.$noSleep.enable()
       this.startWorkout()
-    }
-  }
+    },
+  },
 }
 </script>
 

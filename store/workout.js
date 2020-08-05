@@ -325,7 +325,7 @@ export const actions = {
   },
 
   completeWorkout({ state, commit }) {
-    this.$noSleep.disable()
+    // this.$noSleep.disable()
 
     commit('setState', 'complete')
     clearInterval(state.intervalRef)
