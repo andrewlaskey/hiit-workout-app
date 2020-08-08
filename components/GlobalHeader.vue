@@ -17,13 +17,17 @@
     </div>
     <div class="navbar-menu" :class="{ 'is-mobile-active': menuOpen }">
       <div class="navbar-end">
-        <a
-          class="navbar-item"
-          target="_blank"
-          href="https://www.buymeacoffee.com/hittgeneratorapp"
-        >Support</a>
         <nuxt-link to="/workouts" class="navbar-item">Workouts</nuxt-link>
         <nuxt-link to="/exercises" class="navbar-item">Exercises</nuxt-link>
+        <nuxt-link v-if="!isLoggedIn" to="/account/login" class="navbar-item"
+          >Log in</nuxt-link
+        >
+        <nuxt-link v-if="isLoggedIn" to="/account/user" class="navbar-item"
+          >Account</nuxt-link
+        >
+        <button v-if="isLoggedIn" class="navbar-item" @click="clickSignOut">
+          Sign Out
+        </button>
         <div class="navbar-item">
           <nuxt-link to="/workout" class="button is-primary">Workout</nuxt-link>
         </div>
@@ -33,13 +37,18 @@
 </template>
 
 <script>
-import { mapState, mapMutations } from 'vuex'
+import { mapState, mapGetters, mapMutations, mapActions } from 'vuex'
 export default {
   computed: {
-    ...mapState('menu', ['menuOpen'])
+    ...mapState('menu', ['menuOpen']),
+    ...mapGetters('account', ['isLoggedIn'])
   },
   methods: {
-    ...mapMutations('menu', ['toggleMenu'])
+    ...mapMutations('menu', ['toggleMenu']),
+    ...mapActions('account', ['signOut']),
+    async clickSignOut() {
+      this.signOut({ navigate: true })
+    }
   }
 }
 </script>

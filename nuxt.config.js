@@ -15,6 +15,9 @@ export default {
     ],
     link: [
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
+    ],
+    script: [
+      { src: 'https://sdk.userbase.com/2/userbase.js' }
     ]
   },
   /*
@@ -34,7 +37,8 @@ export default {
     '~/plugins/sounds.js',
     '~/plugins/request.js',
     '~/plugins/markdown.js',
-    '~/plugins/noSleep.client.js'
+    '~/plugins/noSleep.client.js',
+    '~/plugins/userbase.client.js'
   ],
   /*
   ** Nuxt.js dev-modules
@@ -62,7 +66,8 @@ export default {
 
   env: {
     DATOCMS_TOKEN: process.env.DATOCMS_TOKEN,
-    DATOCMS_GRAPHQL: process.env.DATOCMS_GRAPHQL
+    DATOCMS_GRAPHQL: process.env.DATOCMS_GRAPHQL,
+    USERBASE_TOKEN: process.env.USERBASE_TOKEN
   },
 
   router: {
