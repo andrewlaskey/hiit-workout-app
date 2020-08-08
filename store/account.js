@@ -1,11 +1,16 @@
 export const state = () => ({
   user: undefined,
-  accountError: undefined
+  accountError: undefined,
+  accountDisplayError: ''
 })
 
 export const getters = {
   isLoggedIn(state) {
     return !!state.user
+  },
+
+  isAccountError(state) {
+    return !!state.accountError
   }
 }
 
@@ -16,11 +21,15 @@ export const mutations = {
 
   setError(state, error) {
     state.accountError = error
+  },
+
+  setDisplayError(state, errorMessage) {
+    state.accountDisplayError = errorMessage
   }
 }
 
 export const actions = {
-  async init({ commit }) {
+  async init({ commit, dispatch }) {
     try {
       const session = await this.$ub.init({ appId: process.env.USERBASE_TOKEN })
 
@@ -28,12 +37,11 @@ export const actions = {
         commit('setUser', session.user)
       }
     } catch (error) {
-      console.log(error)
-      commit('setError', error)
+      dispatch('triggerError', error)
     }
   },
 
-  async signUp({ commit }, { username, email, password, navigate = true }) {
+  async signUp({ commit, dispatch }, { username, email, password, navigate = true }) {
     if (this.$ub) {
       try {
         let user
@@ -50,13 +58,12 @@ export const actions = {
           this.$router.push('/account/user')
         }
       } catch (error) {
-        console.log(error)
-        commit('setError', error)
+        dispatch('triggerError', error)
       }
     }
   },
 
-  async signIn({ commit }, { username, password, navigate = true }) {
+  async signIn({ commit, dispatch }, { username, password, navigate = true }) {
     if (this.$ub) {
       try {
         const user = await this.$ub.signIn({ username, password, rememberMe: 'local' })
@@ -67,13 +74,12 @@ export const actions = {
           this.$router.push('/account/user')
         }
       } catch (error) {
-        console.log(error)
-        commit('setError', error)
+        dispatch('triggerError', error)
       }
     }
   },
 
-  async signOut({ commit }, { navigate }) {
+  async signOut({ commit, dispatch }, { navigate }) {
     if (this.$ub) {
       try {
         await this.$ub.signOut()
@@ -84,9 +90,19 @@ export const actions = {
           this.$router.push('/')
         }
       } catch (error) {
-        console.log(error)
-        commit('setError', error)
+        dispatch('triggerError', error)
       }
     }
+  },
+
+  triggerError({ commit }, error) {
+    console.error(error)
+    commit('setError', error)
+    commit('setDisplayError', error.message)
+  },
+
+  clearErrors({ commit }) {
+    commit('setError', undefined)
+    commit('setDisplayError', '')
   }
 }

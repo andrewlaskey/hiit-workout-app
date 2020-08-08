@@ -25,7 +25,11 @@
         <nuxt-link v-if="isLoggedIn" to="/account/user" class="navbar-item"
           >Account</nuxt-link
         >
-        <button v-if="isLoggedIn" class="navbar-item" @click="clickSignOut">
+        <button
+          v-if="isLoggedIn"
+          class="navbar-item navbar-button"
+          @click="clickSignOut"
+        >
           Sign Out
         </button>
         <div class="navbar-item">
@@ -55,6 +59,18 @@ export default {
 
 <style lang="scss" scoped>
 @import './../assets/styles/variables';
+
+.navbar-button {
+  border: none;
+  font-size: 1em;
+  background: none;
+  cursor: pointer;
+
+  &:hover,
+  &:focus {
+    background-color: #15171c;
+  }
+}
 
 .navbar-burger.is-navbar-burger-active {
   @media screen and (max-width: 1023px) {

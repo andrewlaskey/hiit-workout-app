@@ -48,6 +48,9 @@
                   Sign Up
                 </button>
               </div>
+              <p v-if="isAccountError" class="help is-danger">
+                {{ accountDisplayError }}
+              </p>
             </div>
           </div>
         </div>
@@ -61,7 +64,7 @@
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex'
+import { mapState, mapGetters, mapActions } from 'vuex'
 
 export default {
   data() {
@@ -72,7 +75,8 @@ export default {
     }
   },
   computed: {
-    ...mapState('account', ['user'])
+    ...mapState('account', ['user', 'accountDisplayError']),
+    ...mapGetters('account', ['isAccountError'])
   },
   methods: {
     ...mapActions('account', ['signUp']),
