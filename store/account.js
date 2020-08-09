@@ -1,7 +1,8 @@
 export const state = () => ({
   user: undefined,
   accountError: undefined,
-  accountDisplayError: ''
+  accountDisplayError: '',
+  accountErrorFn: ''
 })
 
 export const getters = {
@@ -25,6 +26,10 @@ export const mutations = {
 
   setDisplayError(state, errorMessage) {
     state.accountDisplayError = errorMessage
+  },
+
+  setErrorFn(state, errorFn) {
+    state.accountErrorFn = errorFn
   }
 }
 
@@ -33,11 +38,13 @@ export const actions = {
     try {
       const session = await this.$ub.init({ appId: process.env.USERBASE_TOKEN })
 
+      dispatch('clearErrors')
+
       if (session.user) {
         commit('setUser', session.user)
       }
     } catch (error) {
-      dispatch('triggerError', error)
+      dispatch('triggerError', { error, errorFn: 'init' })
     }
   },
 
@@ -52,13 +59,14 @@ export const actions = {
           user = await this.$ub.signUp({ username, password, rememberMe: 'local' })
         }
 
+        dispatch('clearErrors')
         commit('setUser', user)
 
         if (navigate) {
           this.$router.push('/account/user')
         }
       } catch (error) {
-        dispatch('triggerError', error)
+        dispatch('triggerError', { error, errorFn: 'signUp' })
       }
     }
   },
@@ -68,13 +76,14 @@ export const actions = {
       try {
         const user = await this.$ub.signIn({ username, password, rememberMe: 'local' })
 
+        dispatch('clearErrors')
         commit('setUser', user)
 
         if (navigate) {
           this.$router.push('/account/user')
         }
       } catch (error) {
-        dispatch('triggerError', error)
+        dispatch('triggerError', { error, errorFn: 'signIn' })
       }
     }
   },
@@ -84,25 +93,58 @@ export const actions = {
       try {
         await this.$ub.signOut()
 
+        dispatch('clearErrors')
         commit('setUser', undefined)
 
         if (navigate) {
           this.$router.push('/')
         }
       } catch (error) {
-        dispatch('triggerError', error)
+        dispatch('triggerError', { error, errorFn: 'signOut' })
       }
     }
   },
 
-  triggerError({ commit }, error) {
+  async updateUser({ state, commit, dispatch }, user) {
+    if (this.$ub) {
+      try {
+        await this.$ub.updateUser(user)
+        dispatch('clearErrors')
+        commit('setUser', {
+          ...state.user,
+          ...user
+        })
+      } catch (error) {
+        dispatch('triggerError', { error, errorFn: 'updateUser' })
+      }
+    }
+  },
+
+  async updatePassword({ state, dispatch }, { currentPassword, newPassword }) {
+    if (this.$ub) {
+      try {
+        await this.$ub.updateUser({
+          username: state.user.username,
+          currentPassword,
+          newPassword
+        })
+        dispatch('clearErrors')
+      } catch (error) {
+        dispatch('triggerError', { error, errorFn: 'updatePassword' })
+      }
+    }
+  },
+
+  triggerError({ commit }, { error, errorFn }) {
     console.error(error)
     commit('setError', error)
     commit('setDisplayError', error.message)
+    commit('setErrorFn', errorFn)
   },
 
   clearErrors({ commit }) {
     commit('setError', undefined)
     commit('setDisplayError', '')
+    commit('setErrorFn', '')
   }
 }
