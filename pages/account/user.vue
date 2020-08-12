@@ -2,21 +2,10 @@
   <div>
     <section class="section">
       <div class="container">
-        <h1 class="title is-1">Account</h1>
         <div v-if="isLoggedIn">
-          <h2 class="title is-3">
-            <div class="level">
-              <div class="level-left">
-                <div class="level-item">
-                  <icon symbol="icon-account_circle" extra-classes="is-large" />
-                </div>
-                <div class="level-item">{{ user.username }}</div>
-              </div>
-            </div>
-          </h2>
+          <account-nav active-tab="settings" />
           <div class="columns">
             <div class="column is-half">
-              <hr />
               <h3 class="title is-4">Update Profile</h3>
               <div class="field">
                 <label class="label" for="username">Username</label>
@@ -105,11 +94,11 @@
 
 <script>
 import { mapState, mapGetters, mapActions } from 'vuex'
-import Icon from '~/components/Icon'
+import AccountNav from '~/components/AccountNav'
 
 export default {
   components: {
-    Icon
+    AccountNav
   },
   middleware: 'auth',
   data() {
