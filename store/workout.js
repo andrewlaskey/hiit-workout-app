@@ -68,12 +68,6 @@ export const state = () => ({
   repeatNum: 4,
   workTimeSeconds: 30,
   restTimeSeconds: 15,
-  noPullupBar: false,
-  noArms: false,
-  noCore: false,
-  noLegs: false,
-  noPlyo: false,
-  noAdvanced: false,
   allExercises: [],
   filteredExercises: [],
   exercises: [],
@@ -95,6 +89,19 @@ export const getters = {
 
   isPlaying(state) {
     return state.intervalRef !== null
+  },
+
+  workoutObj(state) {
+    return {
+      type: state.type,
+      numExercises: state.numExercises,
+      repeatNum: state.repeatNum,
+      workTimeSeconds: state.workTimeSeconds,
+      restTimeSeconds: state.restTimeSeconds,
+      exercises: state.exercises,
+      selectedTags: state.selectedTags,
+      excludeTags: state.excludeTags
+    }
   }
 }
 
@@ -117,30 +124,6 @@ export const mutations = {
 
   setRestTimeSeconds(state, payload) {
     state.restTimeSeconds = parseInt(payload, 10)
-  },
-
-  setPullupBarOption(state, payload) {
-    state.noPullupBar = payload
-  },
-
-  setArmOption(state, payload) {
-    state.noArms = payload
-  },
-
-  setCoreOption(state, payload) {
-    state.noCore = payload
-  },
-
-  setLegsOption(state, payload) {
-    state.noLegs = payload
-  },
-
-  setPlyoOption(state, payload) {
-    state.noPlyo = payload
-  },
-
-  setAdvancedOption(state, payload) {
-    state.noAdvanced = payload
   },
 
   setExercises(state, payload) {
@@ -388,12 +371,6 @@ export const actions = {
       repeatNum = 4,
       workTimeSeconds = 30,
       restTimeSeconds = 15,
-      noPullupBar = false,
-      noArms = false,
-      noCore = false,
-      noLegs = false,
-      noPlyo = false,
-      noAdvanced = false,
       selectedTags = [],
       excludeTags = []
     } = options
@@ -403,12 +380,6 @@ export const actions = {
     commit('setRepeatNum', repeatNum)
     commit('setWorkTimeSeconds', workTimeSeconds)
     commit('setRestTimeSeconds', restTimeSeconds)
-    commit('setPullupBarOption', noPullupBar)
-    commit('setArmOption', noArms)
-    commit('setCoreOption', noCore)
-    commit('setLegsOption', noLegs)
-    commit('setPlyoOption', noPlyo)
-    commit('setAdvancedOption', noAdvanced)
     commit('setSelectedTags', selectedTags)
     commit('setExcludeTags', excludeTags)
   },
