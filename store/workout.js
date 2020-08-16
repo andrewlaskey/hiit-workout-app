@@ -98,7 +98,7 @@ export const getters = {
       repeatNum: state.repeatNum,
       workTimeSeconds: state.workTimeSeconds,
       restTimeSeconds: state.restTimeSeconds,
-      exercises: state.exercises,
+      exercises: state.exercises.map(({ id, handle, name }) => ({ id, handle, name })),
       selectedTags: state.selectedTags,
       excludeTags: state.excludeTags
     }
@@ -307,7 +307,7 @@ export const actions = {
     }
   },
 
-  completeWorkout({ state, commit }) {
+  completeWorkout({ state, getters, commit, dispatch }) {
     // this.$noSleep.disable()
 
     commit('setState', 'complete')
@@ -315,6 +315,8 @@ export const actions = {
     if (state.soundsOn) {
       this.$sounds.playComplete()
     }
+
+    dispatch('history/saveEntry', { ...getters.workoutObj }, { root: true })
   },
 
   countdown({ state, commit, dispatch }) {

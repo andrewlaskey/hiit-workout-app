@@ -4,7 +4,12 @@
       <div class="container">
         <div v-if="isLoggedIn">
           <account-nav active-tab="history" />
-          <p>workout log</p>
+          <div v-if="historyError">
+            <p>{{ historyErrorMessage }}</p>
+          </div>
+          <div v-else>
+            <p>{{ JSON.stringify(entries) }}</p>
+          </div>
         </div>
       </div>
     </section>
@@ -12,7 +17,7 @@
 </template>
 
 <script>
-import { mapState, mapGetters } from 'vuex'
+import { mapState, mapGetters, mapActions } from 'vuex'
 import AccountNav from '~/components/AccountNav'
 
 export default {
@@ -22,7 +27,14 @@ export default {
   middleware: 'auth',
   computed: {
     ...mapState('account', ['user']),
-    ...mapGetters('account', ['isLoggedIn'])
+    ...mapGetters('account', ['isLoggedIn']),
+    ...mapState('history', ['entries', 'historyError', 'historyErrorMessage'])
+  },
+  mounted() {
+    this.initHistory()
+  },
+  methods: {
+    ...mapActions('history', ['initHistory'])
   }
 }
 </script>
