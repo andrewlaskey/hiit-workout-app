@@ -17,7 +17,8 @@ export default {
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
     ],
     script: [
-      { src: 'https://sdk.userbase.com/2/userbase.js' }
+      { src: 'https://sdk.userbase.com/2/userbase.js' },
+      { src: 'https://js.stripe.com/v3/' }
     ]
   },
   /*

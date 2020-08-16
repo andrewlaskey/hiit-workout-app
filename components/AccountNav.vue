@@ -18,6 +18,9 @@
         <li :class="{ 'is-active': activeTab === 'history' }">
           <nuxt-link to="/account/history">History</nuxt-link>
         </li>
+        <li :class="{ 'is-active': activeTab === 'subscription' }">
+          <nuxt-link to="/account/subscription">Subscription</nuxt-link>
+        </li>
       </ul>
     </div>
   </div>

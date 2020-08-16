@@ -62,9 +62,10 @@ export const actions = {
         dispatch('clearErrors')
         commit('setUser', user)
 
-        if (navigate) {
-          this.$router.push('/account/user')
-        }
+        await this.$ub.purchaseSubscription({
+          successUrl: 'http://localhost:3000/account/success',
+          cancelUrl: 'http://localhost:3000/account/cancel'
+        })
       } catch (error) {
         dispatch('triggerError', { error, errorFn: 'signUp' })
       }

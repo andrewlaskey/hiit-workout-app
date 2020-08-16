@@ -3,6 +3,9 @@
     <section class="section">
       <div class="container">
         <h1 class="title is-1">Sign Up</h1>
+        <p class="subtitle">
+          Create an account and access premium features for $4 a month
+        </p>
         <div class="columns">
           <div class="column is-half">
             <div class="field">
@@ -52,12 +55,28 @@
                 {{ accountDisplayError }}
               </p>
             </div>
+            <p>
+              Already have an account?
+              <nuxt-link to="/account/login">Log in</nuxt-link>
+            </p>
+          </div>
+
+          <div class="column is-4 is-offset-1">
+            <div class="box has-text-black">
+              <p class="title is-4 has-text-black">
+                What do you get with premium?
+              </p>
+              <ul class="disc">
+                <li>Track progress with a completed workout log</li>
+                <li>Create custom exercises</li>
+                <li>Manually select exercises</li>
+                <li>Save favorite workout routines</li>
+                <li>20+ kettlebell exercises</li>
+                <li>15+ barbell exercises</li>
+              </ul>
+            </div>
           </div>
         </div>
-        <p>
-          Already have an account?
-          <nuxt-link to="/account/login">Log in</nuxt-link>
-        </p>
       </div>
     </section>
   </div>
@@ -90,3 +109,16 @@ export default {
   }
 }
 </script>
+
+<style lang="scss" scoped>
+@import './../../assets/styles/variables';
+
+.box {
+  background-color: $info;
+}
+
+.disc {
+  padding-left: 1rem;
+  list-style-type: disc;
+}
+</style>

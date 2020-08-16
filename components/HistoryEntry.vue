@@ -9,7 +9,7 @@
         </div>
       </div>
       <div class="level-right">
-        <div class="level-item">
+        <div class="level-item is-hidden-touch">
           <button
             class="button is-info"
             @click="showExercises = !showExercises"
