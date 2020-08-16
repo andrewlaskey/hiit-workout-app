@@ -316,7 +316,13 @@ export const actions = {
       this.$sounds.playComplete()
     }
 
-    dispatch('history/saveEntry', { ...getters.workoutObj }, { root: true })
+    const completedWorkout = { ...getters.workoutObj }
+
+    if (state.type === 'reps') {
+      completedWorkout.totalTime = state.timer
+    }
+
+    dispatch('history/saveEntry', completedWorkout, { root: true })
   },
 
   countdown({ state, commit, dispatch }) {
@@ -384,6 +390,20 @@ export const actions = {
     commit('setRestTimeSeconds', restTimeSeconds)
     commit('setSelectedTags', selectedTags)
     commit('setExcludeTags', excludeTags)
+  },
+
+  presetExercises({ state, commit }, exercises) {
+    const selected = exercises.reduce((all, exercise) => {
+      const found = state.allExercises.find(search => search.id === exercise.id)
+
+      if (found) {
+        all.push(found)
+      }
+
+      return all
+    }, [])
+
+    commit('setExercises', selected)
   },
 
   setRandomRepCount({ state, commit }) {

@@ -8,7 +8,11 @@
             <p>{{ historyErrorMessage }}</p>
           </div>
           <div v-else>
-            <p>{{ JSON.stringify(entries) }}</p>
+            <history-entry
+              v-for="entry in sortedEntries"
+              :key="entry.itemId"
+              :entry="entry.item"
+            />
           </div>
         </div>
       </div>
@@ -19,16 +23,25 @@
 <script>
 import { mapState, mapGetters, mapActions } from 'vuex'
 import AccountNav from '~/components/AccountNav'
+import HistoryEntry from '~/components/HistoryEntry'
 
 export default {
   components: {
-    AccountNav
+    AccountNav,
+    HistoryEntry
   },
   middleware: 'auth',
   computed: {
     ...mapState('account', ['user']),
     ...mapGetters('account', ['isLoggedIn']),
-    ...mapState('history', ['entries', 'historyError', 'historyErrorMessage'])
+    ...mapState('history', ['entries', 'historyError', 'historyErrorMessage']),
+    sortedEntries() {
+      if (this.entries && this.entries.length) {
+        const entries = [...this.entries]
+        return entries.reverse()
+      }
+      return []
+    }
   },
   mounted() {
     this.initHistory()
